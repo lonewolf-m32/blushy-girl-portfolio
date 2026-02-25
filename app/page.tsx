@@ -242,6 +242,12 @@ export default function Home() {
           <div className="absolute bottom-32 left-1/3 w-72 h-72 bg-fuchsia-400/25 rounded-full blur-3xl animate-float"></div>
           <div className="absolute top-2/3 right-1/4 w-96 h-96 bg-rose-300/15 rounded-full blur-3xl animate-float-delayed"></div>
           <div className="absolute bottom-1/4 left-1/2 w-64 h-64 bg-pink-300/20 rounded-full blur-3xl animate-orb-drift"></div>
+
+          <div className="absolute top-10 right-20 w-96 h-96 bg-gradient-to-br from-amber-300/40 via-yellow-400/30 to-orange-300/35 rounded-full animate-golden-glow"></div>
+          <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-tr from-yellow-300/35 via-amber-400/40 to-yellow-500/30 rounded-full animate-golden-pulse"></div>
+          <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-gradient-to-br from-orange-300/30 via-amber-300/35 to-yellow-400/25 rounded-full animate-golden-drift"></div>
+          <div className="absolute bottom-1/3 right-1/3 w-88 h-88 bg-gradient-to-tl from-amber-400/35 via-yellow-300/30 to-orange-400/25 rounded-full animate-golden-glow" style={{ animationDelay: '3s' }}></div>
+          <div className="absolute top-3/4 right-10 w-64 h-64 bg-gradient-to-br from-yellow-400/30 via-amber-300/25 to-orange-300/30 rounded-full animate-golden-pulse" style={{ animationDelay: '5s' }}></div>
         </div>
 
         <div className="absolute inset-0 pointer-events-none opacity-30">
