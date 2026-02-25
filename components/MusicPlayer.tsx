@@ -152,9 +152,9 @@ export default function MusicPlayer() {
             <Button
               onClick={playNext}
               size="lg"
-              className="w-10 h-10 rounded-full bg-cyan-400 hover:bg-cyan-500 transition-all duration-300"
+              className="w-10 h-10 rounded-full bg-rose-200 hover:bg-rose-300 transition-all duration-300"
             >
-              <SkipForward className="h-5 w-5 text-white" />
+              <SkipForward className="h-5 w-5 text-rose-700" />
             </Button>
           </div>
 
