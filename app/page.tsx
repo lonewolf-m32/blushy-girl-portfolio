@@ -576,11 +576,11 @@ export default function Home() {
                 transform: `translate(${mousePosition.x * -10}px, ${mousePosition.y * -10}px)`
               } : {}}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-pink-400 rounded-full blur-3xl opacity-20 animate-pulse-slow"></div>
-              <div className="absolute -inset-4 bg-gradient-to-r from-rose-300 via-pink-300 to-fuchsia-300 rounded-3xl blur-2xl opacity-10 animate-float"></div>
-              <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-rose-100 interactive-glow">
+              <div className={`absolute inset-0 rounded-full blur-3xl opacity-20 animate-pulse-slow ${isDarkMode ? 'bg-gradient-to-r from-cyan-400 to-teal-400' : 'bg-gradient-to-r from-rose-400 to-pink-400'}`}></div>
+              <div className={`absolute -inset-4 rounded-3xl blur-2xl opacity-10 animate-float ${isDarkMode ? 'bg-gradient-to-r from-cyan-300 via-teal-300 to-cyan-300' : 'bg-gradient-to-r from-rose-300 via-pink-300 to-fuchsia-300'}`}></div>
+              <div className={`relative backdrop-blur-sm rounded-2xl p-8 shadow-2xl interactive-glow ${isDarkMode ? 'bg-white/5 border border-white/10' : 'bg-white/90 border border-rose-100'}`}>
                 <div className="mb-8 flex justify-center">
-                  <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-rose-200 shadow-lg">
+                  <div className={`w-48 h-48 rounded-full overflow-hidden border-4 shadow-lg ${isDarkMode ? 'border-cyan-500/50' : 'border-rose-200'}`}>
                     <img
                       src="/AAGiea67SZQ_1760388181671.jpg"
                       alt="Blushy Girl"
@@ -589,25 +589,25 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-4 bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl">
-                    <Code2 className="h-6 w-6 mx-auto mb-2 text-rose-500" />
-                    <p className="text-2xl font-bold text-slate-900">10+</p>
-                    <p className="text-slate-700 text-sm font-semibold">Projects</p>
+                  <div className={`text-center p-4 rounded-xl ${isDarkMode ? 'bg-gradient-to-br from-cyan-500/10 to-teal-500/10' : 'bg-gradient-to-br from-rose-50 to-pink-50'}`}>
+                    <Code2 className={`h-6 w-6 mx-auto mb-2 ${isDarkMode ? 'text-cyan-400' : 'text-rose-500'}`} />
+                    <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>10+</p>
+                    <p className={`text-sm font-semibold ${isDarkMode ? 'text-gray-400' : 'text-slate-700'}`}>Projects</p>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-pink-50 to-fuchsia-50 rounded-xl">
-                    <Database className="h-6 w-6 mx-auto mb-2 text-pink-500" />
-                    <p className="text-2xl font-bold text-slate-900">Fresher</p>
-                    <p className="text-slate-700 text-sm font-semibold">Experience</p>
+                  <div className={`text-center p-4 rounded-xl ${isDarkMode ? 'bg-gradient-to-br from-teal-500/10 to-cyan-500/10' : 'bg-gradient-to-br from-pink-50 to-fuchsia-50'}`}>
+                    <Database className={`h-6 w-6 mx-auto mb-2 ${isDarkMode ? 'text-teal-400' : 'text-pink-500'}`} />
+                    <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Fresher</p>
+                    <p className={`text-sm font-semibold ${isDarkMode ? 'text-gray-400' : 'text-slate-700'}`}>Experience</p>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-fuchsia-50 to-pink-50 rounded-xl">
-                    <Palette className="h-6 w-6 mx-auto mb-2 text-fuchsia-500" />
-                    <p className="text-2xl font-bold text-slate-900">2024</p>
-                    <p className="text-slate-700 text-sm font-semibold">Graduate</p>
+                  <div className={`text-center p-4 rounded-xl ${isDarkMode ? 'bg-gradient-to-br from-cyan-500/10 to-teal-500/10' : 'bg-gradient-to-br from-fuchsia-50 to-pink-50'}`}>
+                    <Palette className={`h-6 w-6 mx-auto mb-2 ${isDarkMode ? 'text-cyan-400' : 'text-fuchsia-500'}`} />
+                    <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>2024</p>
+                    <p className={`text-sm font-semibold ${isDarkMode ? 'text-gray-400' : 'text-slate-700'}`}>Graduate</p>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-pink-50 to-rose-50 rounded-xl">
-                    <Code2 className="h-6 w-6 mx-auto mb-2 text-pink-600" />
-                    <p className="text-2xl font-bold text-slate-900">8+</p>
-                    <p className="text-slate-700 text-sm font-semibold">Technologies</p>
+                  <div className={`text-center p-4 rounded-xl ${isDarkMode ? 'bg-gradient-to-br from-teal-500/10 to-cyan-500/10' : 'bg-gradient-to-br from-pink-50 to-rose-50'}`}>
+                    <Code2 className={`h-6 w-6 mx-auto mb-2 ${isDarkMode ? 'text-teal-400' : 'text-pink-600'}`} />
+                    <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>8+</p>
+                    <p className={`text-sm font-semibold ${isDarkMode ? 'text-gray-400' : 'text-slate-700'}`}>Technologies</p>
                   </div>
                 </div>
               </div>
@@ -647,7 +647,7 @@ export default function Home() {
                 {touchRipples.map(ripple => (
                   <span
                     key={ripple.id}
-                    className="absolute rounded-full bg-rose-400/30 pointer-events-none animate-ripple"
+                    className={`absolute rounded-full pointer-events-none animate-ripple ${isDarkMode ? 'bg-cyan-400/30' : 'bg-rose-400/30'}`}
                     style={{
                       left: ripple.x,
                       top: ripple.y,
@@ -717,7 +717,7 @@ export default function Home() {
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <div className="absolute inset-0 bg-gradient-to-br from-rose-500/20 via-transparent to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${isDarkMode ? 'bg-gradient-to-br from-cyan-500/20 via-transparent to-teal-500/20' : 'bg-gradient-to-br from-rose-500/20 via-transparent to-pink-500/20'}`}></div>
                   </div>
 
                   <div className={`p-8 lg:p-12 flex flex-col justify-center transition-all duration-500 ${
