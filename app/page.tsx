@@ -304,7 +304,7 @@ export default function Home() {
       }`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="text-2xl font-bold bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">
-            Shutumani
+            Blushy Girl
           </div>
 
           <div className="hidden md:flex gap-8 items-center">
@@ -488,7 +488,7 @@ export default function Home() {
                 <h1 className="text-6xl font-bold leading-tight">
                   <span className="text-slate-900 drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">Hi, I'm</span>
                   <span className="block bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">
-                    Blushy Girl
+                    Shutumani
                   </span>
                 </h1>
               </div>
