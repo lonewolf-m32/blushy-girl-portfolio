@@ -323,7 +323,7 @@ export default function Home() {
 
       <div className={`fixed top-0 left-0 w-full h-1 z-50 transition-colors duration-500 ${isDarkMode ? 'bg-white/10' : 'bg-slate-200/50'}`}>
         <div
-          className="h-full bg-gradient-to-r from-rose-400 via-pink-400 to-fuchsia-400 transition-all duration-300 ease-out"
+          className={`h-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-500' : 'bg-gradient-to-r from-rose-400 via-pink-400 to-fuchsia-400'}`}
           style={{ width: `${scrollProgress}%` }}
         ></div>
       </div>
@@ -349,13 +349,13 @@ export default function Home() {
               onClick={(e) => scrollToSection(e, 'about')}
               className={`relative text-sm font-medium transition-all duration-300 ${
                 activeSection === 'about'
-                  ? 'text-rose-600'
-                  : isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-600 hover:text-rose-600'
+                  ? (isDarkMode ? 'text-cyan-400' : 'text-rose-600')
+                  : isDarkMode ? 'text-white hover:text-cyan-400' : 'text-slate-600 hover:text-rose-600'
               }`}
             >
               About
               {activeSection === 'about' && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full"></span>
+                <span className={`absolute -bottom-1 left-0 w-full h-0.5 rounded-full ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500' : 'bg-gradient-to-r from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
             <a
@@ -363,13 +363,13 @@ export default function Home() {
               onClick={(e) => scrollToSection(e, 'skills')}
               className={`relative text-sm font-medium transition-all duration-300 ${
                 activeSection === 'skills'
-                  ? 'text-rose-600'
-                  : isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-600 hover:text-rose-600'
+                  ? (isDarkMode ? 'text-cyan-400' : 'text-rose-600')
+                  : isDarkMode ? 'text-white hover:text-cyan-400' : 'text-slate-600 hover:text-rose-600'
               }`}
             >
               Skills
               {activeSection === 'skills' && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full"></span>
+                <span className={`absolute -bottom-1 left-0 w-full h-0.5 rounded-full ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500' : 'bg-gradient-to-r from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
             <a
@@ -377,13 +377,13 @@ export default function Home() {
               onClick={(e) => scrollToSection(e, 'projects')}
               className={`relative text-sm font-medium transition-all duration-300 ${
                 activeSection === 'projects'
-                  ? 'text-rose-600'
-                  : isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-600 hover:text-rose-600'
+                  ? (isDarkMode ? 'text-cyan-400' : 'text-rose-600')
+                  : isDarkMode ? 'text-white hover:text-cyan-400' : 'text-slate-600 hover:text-rose-600'
               }`}
             >
               Projects
               {activeSection === 'projects' && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full"></span>
+                <span className={`absolute -bottom-1 left-0 w-full h-0.5 rounded-full ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500' : 'bg-gradient-to-r from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
             <a
@@ -391,13 +391,13 @@ export default function Home() {
               onClick={(e) => scrollToSection(e, 'contact')}
               className={`relative text-sm font-medium transition-all duration-300 ${
                 activeSection === 'contact'
-                  ? 'text-rose-600'
-                  : isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-600 hover:text-rose-600'
+                  ? (isDarkMode ? 'text-cyan-400' : 'text-rose-600')
+                  : isDarkMode ? 'text-white hover:text-cyan-400' : 'text-slate-600 hover:text-rose-600'
               }`}
             >
               Contact
               {activeSection === 'contact' && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full"></span>
+                <span className={`absolute -bottom-1 left-0 w-full h-0.5 rounded-full ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500' : 'bg-gradient-to-r from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
           </div>
@@ -445,13 +445,13 @@ export default function Home() {
               onClick={(e) => scrollToSection(e, 'about')}
               className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
                 activeSection === 'about'
-                  ? 'text-rose-600 bg-rose-50'
-                  : isDarkMode ? 'text-white hover:text-rose-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+                  ? (isDarkMode ? 'text-cyan-400 bg-white/5' : 'text-rose-600 bg-rose-50')
+                  : isDarkMode ? 'text-white hover:text-cyan-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
               }`}
             >
               About
               {activeSection === 'about' && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-rose-500 to-pink-500 rounded-full"></span>
+                <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full ${isDarkMode ? 'bg-gradient-to-b from-cyan-500 to-teal-500' : 'bg-gradient-to-b from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
             <a
@@ -459,13 +459,13 @@ export default function Home() {
               onClick={(e) => scrollToSection(e, 'skills')}
               className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
                 activeSection === 'skills'
-                  ? 'text-rose-600 bg-rose-50'
-                  : isDarkMode ? 'text-white hover:text-rose-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+                  ? (isDarkMode ? 'text-cyan-400 bg-white/5' : 'text-rose-600 bg-rose-50')
+                  : isDarkMode ? 'text-white hover:text-cyan-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
               }`}
             >
               Skills
               {activeSection === 'skills' && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-rose-500 to-pink-500 rounded-full"></span>
+                <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full ${isDarkMode ? 'bg-gradient-to-b from-cyan-500 to-teal-500' : 'bg-gradient-to-b from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
             <a
@@ -473,13 +473,13 @@ export default function Home() {
               onClick={(e) => scrollToSection(e, 'projects')}
               className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
                 activeSection === 'projects'
-                  ? 'text-rose-600 bg-rose-50'
-                  : isDarkMode ? 'text-white hover:text-rose-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+                  ? (isDarkMode ? 'text-cyan-400 bg-white/5' : 'text-rose-600 bg-rose-50')
+                  : isDarkMode ? 'text-white hover:text-cyan-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
               }`}
             >
               Projects
               {activeSection === 'projects' && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-rose-500 to-pink-500 rounded-full"></span>
+                <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full ${isDarkMode ? 'bg-gradient-to-b from-cyan-500 to-teal-500' : 'bg-gradient-to-b from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
             <a
@@ -487,13 +487,13 @@ export default function Home() {
               onClick={(e) => scrollToSection(e, 'contact')}
               className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
                 activeSection === 'contact'
-                  ? 'text-rose-600 bg-rose-50'
-                  : isDarkMode ? 'text-white hover:text-rose-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+                  ? (isDarkMode ? 'text-cyan-400 bg-white/5' : 'text-rose-600 bg-rose-50')
+                  : isDarkMode ? 'text-white hover:text-cyan-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
               }`}
             >
               Contact
               {activeSection === 'contact' && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-rose-500 to-pink-500 rounded-full"></span>
+                <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full ${isDarkMode ? 'bg-gradient-to-b from-cyan-500 to-teal-500' : 'bg-gradient-to-b from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
 
@@ -533,7 +533,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div className="space-y-2">
-                <p className="text-rose-600 font-bold tracking-wide text-sm drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)]">FRESHER FULL STACK DEVELOPER</p>
+                <p className={`font-bold tracking-wide text-sm drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)] ${isDarkMode ? 'text-cyan-400' : 'text-rose-600'}`}>FRESHER FULL STACK DEVELOPER</p>
                 <h1 className="text-6xl font-bold leading-tight">
                   <span className={`transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900 drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]'}`}>Hi, I'm</span>
                   <span className="block bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">
@@ -546,25 +546,25 @@ export default function Home() {
                 Eager to learn, grow, and contribute to innovative projects with modern technologies.
               </p>
               <div className="flex gap-4 pt-4">
-                <Button className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-8 active:scale-95 transition-transform">
+                <Button className={`text-white px-8 active:scale-95 transition-transform ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600' : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600'}`}>
                   View Projects <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button
                   onClick={() => window.open('/AmalenduA.CV.pdf', '_blank')}
                   variant="outline"
-                  className={`active:scale-95 transition-all duration-300 ${isDarkMode ? 'border-white/20 text-white hover:border-rose-500 hover:text-rose-400' : 'border-slate-300 hover:border-rose-500 hover:text-rose-500'}`}
+                  className={`active:scale-95 transition-all duration-300 ${isDarkMode ? 'border-white/20 text-white hover:border-cyan-500 hover:text-cyan-400' : 'border-slate-300 hover:border-rose-500 hover:text-rose-500'}`}
                 >
                   Download CV
                 </Button>
               </div>
               <div className="flex gap-4 pt-4">
-                <a href="#" className={`p-3 rounded-full border transition-all duration-300 ${isDarkMode ? 'border-white/20 hover:border-rose-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
+                <a href="#" className={`p-3 rounded-full border transition-all duration-300 ${isDarkMode ? 'border-white/20 hover:border-cyan-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
                   <Github className={`h-5 w-5 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-slate-600'}`} />
                 </a>
-                <a href="#" className={`p-3 rounded-full border transition-all duration-300 ${isDarkMode ? 'border-white/20 hover:border-rose-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
+                <a href="#" className={`p-3 rounded-full border transition-all duration-300 ${isDarkMode ? 'border-white/20 hover:border-cyan-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
                   <Linkedin className={`h-5 w-5 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-slate-600'}`} />
                 </a>
-                <a href="#" className={`p-3 rounded-full border transition-all duration-300 ${isDarkMode ? 'border-white/20 hover:border-rose-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
+                <a href="#" className={`p-3 rounded-full border transition-all duration-300 ${isDarkMode ? 'border-white/20 hover:border-cyan-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
                   <Mail className={`h-5 w-5 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-slate-600'}`} />
                 </a>
               </div>
@@ -623,7 +623,7 @@ export default function Home() {
             sectionAnimations.skills === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
             'opacity-0 translate-y-20'
           }`}>
-            <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">EXPERTISE</p>
+            <p className={`font-bold tracking-wide mb-2 text-sm ${isDarkMode ? 'text-cyan-400' : 'text-rose-600'}`}>EXPERTISE</p>
             <h2 className={`text-5xl font-bold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Skills & Technologies</h2>
           </div>
 
@@ -663,7 +663,7 @@ export default function Home() {
                     <Badge
                       key={index}
                       variant="secondary"
-                      className={`font-semibold transition-all active:scale-90 ${isDarkMode ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-slate-100 text-slate-800 hover:bg-rose-100 hover:text-rose-700'}`}
+                      className={`font-semibold transition-all active:scale-90 ${isDarkMode ? 'bg-white/10 text-white hover:bg-cyan-500/20 hover:text-cyan-300' : 'bg-slate-100 text-slate-800 hover:bg-rose-100 hover:text-rose-700'}`}
                       style={{
                         animationDelay: `${(idx * 100) + (index * 50)}ms`
                       }}
@@ -685,7 +685,7 @@ export default function Home() {
             sectionAnimations.projects === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
             'opacity-0 translate-y-20'
           }`}>
-            <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">PORTFOLIO</p>
+            <p className={`font-bold tracking-wide mb-2 text-sm ${isDarkMode ? 'text-cyan-400' : 'text-rose-600'}`}>PORTFOLIO</p>
             <h2 className={`text-5xl font-bold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Featured Projects</h2>
           </div>
 
@@ -724,9 +724,9 @@ export default function Home() {
                     isTransitioning ? 'translate-x-8 opacity-0' : 'translate-x-0 opacity-100'
                   }`}>
                     <div className="mb-4">
-                      <span className="text-sm text-rose-600 font-bold">PROJECT {currentProject + 1} / {projects.length}</span>
+                      <span className={`text-sm font-bold ${isDarkMode ? 'text-cyan-400' : 'text-rose-600'}`}>PROJECT {currentProject + 1} / {projects.length}</span>
                     </div>
-                    <h3 className={`text-4xl font-bold mb-4 transition-all duration-500 ${isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-900 hover:text-rose-600'}`}>
+                    <h3 className={`text-4xl font-bold mb-4 transition-all duration-500 ${isDarkMode ? 'text-white hover:text-cyan-400' : 'text-slate-900 hover:text-rose-600'}`}>
                       {projects[currentProject].title}
                     </h3>
                     <p className={`text-lg mb-6 leading-relaxed font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>{projects[currentProject].description}</p>
@@ -735,7 +735,7 @@ export default function Home() {
                       {projects[currentProject].tech.map((tech, idx) => (
                         <Badge
                           key={idx}
-                          className="bg-gradient-to-r from-rose-500 to-pink-500 text-white hover:scale-110 transition-transform duration-300"
+                          className={`text-white hover:scale-110 transition-transform duration-300 ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500' : 'bg-gradient-to-r from-rose-500 to-pink-500'}`}
                           style={{ animationDelay: `${idx * 0.1}s` }}
                         >
                           {tech}
@@ -744,10 +744,10 @@ export default function Home() {
                     </div>
 
                     <div className="flex gap-4">
-                      <Button className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 hover:scale-105 transition-all duration-300 hover:shadow-lg">
+                      <Button className={`hover:scale-105 transition-all duration-300 hover:shadow-lg ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600' : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600'}`}>
                         View Project
                       </Button>
-                      <Button variant="outline" className={`hover:scale-105 transition-all duration-300 ${isDarkMode ? 'border-white/20 text-white hover:border-rose-500 hover:text-rose-400' : 'border-slate-300 hover:border-rose-500 hover:text-rose-500'}`}>
+                      <Button variant="outline" className={`hover:scale-105 transition-all duration-300 ${isDarkMode ? 'border-white/20 text-white hover:border-cyan-500 hover:text-cyan-400' : 'border-slate-300 hover:border-rose-500 hover:text-rose-500'}`}>
                         <Github className="mr-2 h-4 w-4" /> Code
                       </Button>
                     </div>
@@ -761,7 +761,7 @@ export default function Home() {
               disabled={isTransitioning}
               className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-3 md:p-3 w-12 h-12 md:w-auto md:h-auto rounded-full backdrop-blur-sm shadow-lg transition-all hover:scale-110 hover:shadow-xl hover:-translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group active:scale-95 ${isDarkMode ? 'bg-white/10 hover:bg-white/20' : 'bg-white/90 hover:bg-rose-50'}`}
             >
-              <ChevronLeft className={`h-6 w-6 transition-colors ${isDarkMode ? 'text-white group-hover:text-rose-400' : 'text-slate-900 group-hover:text-rose-600'}`} />
+              <ChevronLeft className={`h-6 w-6 transition-colors ${isDarkMode ? 'text-white group-hover:text-cyan-400' : 'text-slate-900 group-hover:text-rose-600'}`} />
             </button>
 
             <button
@@ -769,7 +769,7 @@ export default function Home() {
               disabled={isTransitioning}
               className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-3 md:p-3 w-12 h-12 md:w-auto md:h-auto rounded-full backdrop-blur-sm shadow-lg transition-all hover:scale-110 hover:shadow-xl hover:translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group active:scale-95 ${isDarkMode ? 'bg-white/10 hover:bg-white/20' : 'bg-white/90 hover:bg-rose-50'}`}
             >
-              <ChevronRight className={`h-6 w-6 transition-colors ${isDarkMode ? 'text-white group-hover:text-rose-400' : 'text-slate-900 group-hover:text-rose-600'}`} />
+              <ChevronRight className={`h-6 w-6 transition-colors ${isDarkMode ? 'text-white group-hover:text-cyan-400' : 'text-slate-900 group-hover:text-rose-600'}`} />
             </button>
 
             <div className="flex justify-center gap-2 mt-8 relative">
@@ -788,8 +788,8 @@ export default function Home() {
                   disabled={isTransitioning}
                   className={`h-2 rounded-full transition-all duration-300 hover:scale-125 disabled:cursor-not-allowed active:scale-90 ${
                     idx === currentProject
-                      ? 'w-8 bg-gradient-to-r from-rose-500 to-pink-500 shadow-lg'
-                      : 'w-2 bg-slate-300 hover:bg-rose-300'
+                      ? (isDarkMode ? 'w-8 bg-gradient-to-r from-cyan-500 to-teal-500 shadow-lg' : 'w-8 bg-gradient-to-r from-rose-500 to-pink-500 shadow-lg')
+                      : (isDarkMode ? 'w-2 bg-slate-500 hover:bg-cyan-400' : 'w-2 bg-slate-300 hover:bg-rose-300')
                   }`}
                 />
               ))}
@@ -797,9 +797,9 @@ export default function Home() {
 
             {showSwipeHint && (
               <div className="md:hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg animate-bounce-in">
-                <ChevronLeft className="h-4 w-4 text-rose-500 animate-pulse" />
+                <ChevronLeft className={`h-4 w-4 animate-pulse ${isDarkMode ? 'text-cyan-500' : 'text-rose-500'}`} />
                 <span className="text-xs font-medium text-slate-700">Swipe to explore</span>
-                <ChevronRight className="h-4 w-4 text-rose-500 animate-pulse" />
+                <ChevronRight className={`h-4 w-4 animate-pulse ${isDarkMode ? 'text-cyan-500' : 'text-rose-500'}`} />
               </div>
             )}
           </div>
@@ -813,7 +813,7 @@ export default function Home() {
             sectionAnimations.contact === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
             'opacity-0 translate-y-20'
           }`}>
-            <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">GET IN TOUCH</p>
+            <p className={`font-bold tracking-wide mb-2 text-sm ${isDarkMode ? 'text-cyan-400' : 'text-rose-600'}`}>GET IN TOUCH</p>
             <h2 className={`text-5xl font-bold mb-6 transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Let's Connect</h2>
             <p className={`text-xl mb-12 font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>
               I'm actively looking for opportunities to start my career. Let's connect and discuss how I can contribute to your team!
@@ -835,7 +835,7 @@ export default function Home() {
                 transitionDelay: '100ms'
               } : { transitionDelay: '100ms' }}
             >
-              <Mail className="h-8 w-8 mx-auto mb-4 text-rose-500" />
+              <Mail className={`h-8 w-8 mx-auto mb-4 ${isDarkMode ? 'text-cyan-400' : 'text-rose-500'}`} />
               <h3 className={`font-bold mb-2 transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Email</h3>
               <p className={`font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>amalendua10@gmail.com</p>
             </Card>
@@ -853,7 +853,7 @@ export default function Home() {
                 transitionDelay: '200ms'
               }}
             >
-              <Github className="h-8 w-8 mx-auto mb-4 text-rose-500" />
+              <Github className={`h-8 w-8 mx-auto mb-4 ${isDarkMode ? 'text-cyan-400' : 'text-rose-500'}`} />
               <h3 className={`font-bold mb-2 transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>GitHub</h3>
               <p className={`font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>@blushygirl</p>
             </Card>
@@ -872,7 +872,7 @@ export default function Home() {
                 transitionDelay: '300ms'
               } : { transitionDelay: '300ms' }}
             >
-              <Linkedin className="h-8 w-8 mx-auto mb-4 text-rose-500" />
+              <Linkedin className={`h-8 w-8 mx-auto mb-4 ${isDarkMode ? 'text-cyan-400' : 'text-rose-500'}`} />
               <h3 className={`font-bold mb-2 transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>LinkedIn</h3>
               <p className={`font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>/in/blushygirl</p>
             </Card>
@@ -885,7 +885,9 @@ export default function Home() {
               const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
               window.open(whatsappUrl, '_blank')
             }}
-            className={`bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-12 py-6 text-lg active:scale-95 transition-all duration-700 ${
+            className={`text-white px-12 py-6 text-lg active:scale-95 transition-all duration-700 ${
+              isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600' : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600'
+            } ${
               visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
             }`}
             style={{
