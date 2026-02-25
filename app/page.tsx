@@ -277,7 +277,7 @@ export default function Home() {
           {[...Array(8)].map((_, i) => (
             <div
               key={`golden-${i}`}
-              className="absolute rounded-full bg-gradient-to-br from-teal-300 via-cyan-400 to-teal-400 animate-float opacity-50"
+              className={`absolute rounded-full animate-float opacity-50 ${isDarkMode ? 'bg-gradient-to-br from-teal-300 via-cyan-400 to-teal-400' : 'bg-gradient-to-br from-amber-300 via-yellow-400 to-amber-400'}`}
               style={{
                 left: `${(i * 20 + 10) % 85}%`,
                 top: `${(i * 17 + 10) % 80}%`,
@@ -286,7 +286,7 @@ export default function Home() {
                 animationDelay: `${i * 0.7}s`,
                 animationDuration: `${5 + (i % 3) * 2}s`,
                 filter: 'blur(3px)',
-                boxShadow: '0 0 60px rgba(20, 184, 166, 0.6), 0 0 100px rgba(20, 184, 166, 0.4)'
+                boxShadow: isDarkMode ? '0 0 60px rgba(20, 184, 166, 0.6), 0 0 100px rgba(20, 184, 166, 0.4)' : '0 0 60px rgba(251, 191, 36, 0.6), 0 0 100px rgba(251, 191, 36, 0.4)'
               }}
             />
           ))}
