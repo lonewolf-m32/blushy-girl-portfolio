@@ -307,6 +307,10 @@
   transform: translateY(-2px);
 }
 
+.dark .interactive-glow:hover {
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+}
+
 .perspective-1000 {
   perspective: 1000px;
 }
@@ -471,6 +475,10 @@
   .interactive-glow:active {
     box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
     transform: scale(0.98);
+  }
+
+  .dark .interactive-glow:active {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
   }
 }
 

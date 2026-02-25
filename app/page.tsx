@@ -332,7 +332,7 @@ export default function Home() {
         showNavbar ? 'translate-y-0' : '-translate-y-full'
       } ${isDarkMode ? 'bg-black/70 border-white/10' : 'bg-white/70 border-rose-100/50'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className={`text-2xl font-bold transition-all duration-500 ${isDarkMode ? 'text-white' : 'bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent'}`}>
+          <div className={`text-2xl font-bold transition-all duration-500 ${isDarkMode ? 'bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent' : 'bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent'}`}>
             Blushy Girl
           </div>
 
@@ -416,17 +416,17 @@ export default function Home() {
               aria-label="Toggle menu"
             >
             <span
-              className={`w-6 h-0.5 rounded-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-white' : 'bg-rose-600'} ${
+              className={`w-6 h-0.5 rounded-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-cyan-400' : 'bg-rose-600'} ${
                 isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
               }`}
             ></span>
             <span
-              className={`w-6 h-0.5 rounded-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-white' : 'bg-rose-600'} ${
+              className={`w-6 h-0.5 rounded-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-cyan-400' : 'bg-rose-600'} ${
                 isMobileMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
               }`}
             ></span>
             <span
-              className={`w-6 h-0.5 rounded-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-white' : 'bg-rose-600'} ${
+              className={`w-6 h-0.5 rounded-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-cyan-400' : 'bg-rose-600'} ${
                 isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
               }`}
             ></span>
@@ -497,16 +497,16 @@ export default function Home() {
               )}
             </a>
 
-            <div className="border-t border-rose-100 pt-4 mt-2">
+            <div className={`pt-4 mt-2 ${isDarkMode ? 'border-t border-white/10' : 'border-t border-rose-100'}`}>
               <div className="flex gap-4 justify-center">
-                <a href="#" className="p-3 rounded-full border border-slate-300 hover:border-rose-500 hover:bg-rose-50 transition-all">
-                  <Github className="h-5 w-5 text-slate-600" />
+                <a href="#" className={`p-3 rounded-full border transition-all ${isDarkMode ? 'border-white/20 hover:border-cyan-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
+                  <Github className={`h-5 w-5 ${isDarkMode ? 'text-white' : 'text-slate-600'}`} />
                 </a>
-                <a href="#" className="p-3 rounded-full border border-slate-300 hover:border-rose-500 hover:bg-rose-50 transition-all">
-                  <Linkedin className="h-5 w-5 text-slate-600" />
+                <a href="#" className={`p-3 rounded-full border transition-all ${isDarkMode ? 'border-white/20 hover:border-cyan-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
+                  <Linkedin className={`h-5 w-5 ${isDarkMode ? 'text-white' : 'text-slate-600'}`} />
                 </a>
-                <a href="#" className="p-3 rounded-full border border-slate-300 hover:border-rose-500 hover:bg-rose-50 transition-all">
-                  <Mail className="h-5 w-5 text-slate-600" />
+                <a href="#" className={`p-3 rounded-full border transition-all ${isDarkMode ? 'border-white/20 hover:border-cyan-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
+                  <Mail className={`h-5 w-5 ${isDarkMode ? 'text-white' : 'text-slate-600'}`} />
                 </a>
               </div>
             </div>
@@ -528,7 +528,7 @@ export default function Home() {
           'opacity-0 translate-y-20'
         }`}>
           <div className="mb-12 max-w-md mx-auto lg:mx-0">
-            <MusicPlayer />
+            <MusicPlayer isDarkMode={isDarkMode} />
           </div>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
@@ -536,7 +536,7 @@ export default function Home() {
                 <p className={`font-bold tracking-wide text-sm drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)] ${isDarkMode ? 'text-cyan-400' : 'text-rose-600'}`}>FRESHER FULL STACK DEVELOPER</p>
                 <h1 className="text-6xl font-bold leading-tight">
                   <span className={`transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900 drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]'}`}>Hi, I'm</span>
-                  <span className="block bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">
+                  <span className={`block bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)] ${isDarkMode ? 'bg-gradient-to-r from-cyan-400 to-teal-400' : 'bg-gradient-to-r from-rose-600 to-pink-600'}`}>
                     Blushy Girl
                   </span>
                 </h1>

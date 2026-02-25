@@ -6,13 +6,17 @@ import { Card } from '@/components/ui/card'
 import { Play, Pause, Volume2, SkipBack, SkipForward } from 'lucide-react'
 import { Slider } from '@/components/ui/slider'
 
+interface MusicPlayerProps {
+  isDarkMode?: boolean
+}
+
 const songs = [
   { title: 'Husn', src: '/Husn_-_Djjohal.fm.mp3' },
   { title: 'Maruvarthai', src: '/Maru_Varthai_Pesathey_-_Sid_Sriram_(1).mp3' },
   { title: 'Jeena Jeena', src: '/Jeena_Jeena_Badlapur-(Mr-Jat.in)_(1).mp3' }
 ]
 
-export default function MusicPlayer() {
+export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -96,19 +100,19 @@ export default function MusicPlayer() {
   }
 
   return (
-    <Card className="p-6 bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl hover:shadow-2xl transition-all duration-300">
+    <Card className={`p-6 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300 ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white/90 border-rose-200'}`}>
       <audio ref={audioRef} src={songs[currentSongIndex].src} />
 
       <div className="flex items-center gap-4 mb-4">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 flex items-center justify-center shadow-lg">
-          <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center">
-            <div className="w-4 h-4 rounded-full bg-gradient-to-br from-rose-400 to-pink-400"></div>
+        <div className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg ${isDarkMode ? 'bg-gradient-to-br from-cyan-400 to-teal-400' : 'bg-gradient-to-br from-rose-400 to-pink-400'}`}>
+          <div className={`w-14 h-14 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-slate-800' : 'bg-white'}`}>
+            <div className={`w-4 h-4 rounded-full ${isDarkMode ? 'bg-gradient-to-br from-cyan-400 to-teal-400' : 'bg-gradient-to-br from-rose-400 to-pink-400'}`}></div>
           </div>
         </div>
 
         <div className="flex-1">
-          <h3 className="font-bold text-slate-900 text-lg">{songs[currentSongIndex].title}</h3>
-          <p className="text-slate-600 text-sm">Now Playing</p>
+          <h3 className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{songs[currentSongIndex].title}</h3>
+          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-slate-600'}`}>Now Playing</p>
         </div>
       </div>
 
@@ -121,7 +125,7 @@ export default function MusicPlayer() {
             onValueChange={handleSeek}
             className="cursor-pointer"
           />
-          <div className="flex justify-between text-xs text-slate-600 font-medium">
+          <div className={`flex justify-between text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-slate-600'}`}>
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(duration)}</span>
           </div>
@@ -132,15 +136,15 @@ export default function MusicPlayer() {
             <Button
               onClick={playPrevious}
               size="lg"
-              className="w-10 h-10 rounded-full bg-rose-200 hover:bg-rose-300 transition-all duration-300"
+              className={`w-10 h-10 rounded-full transition-all duration-300 ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-200 hover:bg-rose-300'}`}
             >
-              <SkipBack className="h-5 w-5 text-rose-700" />
+              <SkipBack className={`h-5 w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-700'}`} />
             </Button>
 
             <Button
               onClick={togglePlayPause}
               size="lg"
-              className="w-14 h-14 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300"
+              className={`w-14 h-14 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600' : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600'}`}
             >
               {isPlaying ? (
                 <Pause className="h-6 w-6" fill="white" />
@@ -152,14 +156,14 @@ export default function MusicPlayer() {
             <Button
               onClick={playNext}
               size="lg"
-              className="w-10 h-10 rounded-full bg-rose-200 hover:bg-rose-300 transition-all duration-300"
+              className={`w-10 h-10 rounded-full transition-all duration-300 ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-200 hover:bg-rose-300'}`}
             >
-              <SkipForward className="h-5 w-5 text-rose-700" />
+              <SkipForward className={`h-5 w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-700'}`} />
             </Button>
           </div>
 
           <div className="flex items-center gap-2 flex-1">
-            <Volume2 className="h-5 w-5 text-rose-500" />
+            <Volume2 className={`h-5 w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-500'}`} />
             <Slider
               value={[volume]}
               max={100}
