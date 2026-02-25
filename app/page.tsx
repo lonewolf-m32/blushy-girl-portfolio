@@ -267,17 +267,17 @@ export default function Home() {
           } : {}}
         >
           <div className="absolute top-20 left-20 w-64 h-64 bg-rose-400/25 rounded-full blur-3xl animate-orb-drift"></div>
-          <div className="absolute top-1/3 right-32 w-80 h-80 bg-pink-400/20 rounded-full blur-3xl animate-orb-drift-alt"></div>
-          <div className="absolute bottom-32 left-1/3 w-72 h-72 bg-fuchsia-400/25 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute top-2/3 right-1/4 w-96 h-96 bg-rose-300/15 rounded-full blur-3xl animate-float-delayed"></div>
-          <div className="absolute bottom-1/4 left-1/2 w-64 h-64 bg-pink-300/20 rounded-full blur-3xl animate-orb-drift"></div>
+          <div className="absolute top-1/3 right-32 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl animate-orb-drift-alt"></div>
+          <div className="absolute bottom-32 left-1/3 w-72 h-72 bg-teal-400/25 rounded-full blur-3xl animate-float"></div>
+          <div className="absolute top-2/3 right-1/4 w-96 h-96 bg-emerald-300/15 rounded-full blur-3xl animate-float-delayed"></div>
+          <div className="absolute bottom-1/4 left-1/2 w-64 h-64 bg-aqua-300/20 rounded-full blur-3xl animate-orb-drift"></div>
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(8)].map((_, i) => (
             <div
               key={`golden-${i}`}
-              className="absolute rounded-full bg-gradient-to-br from-amber-300 via-yellow-400 to-amber-400 animate-float opacity-50"
+              className="absolute rounded-full bg-gradient-to-br from-teal-300 via-cyan-400 to-teal-400 animate-float opacity-50"
               style={{
                 left: `${(i * 20 + 10) % 85}%`,
                 top: `${(i * 17 + 10) % 80}%`,
@@ -286,15 +286,15 @@ export default function Home() {
                 animationDelay: `${i * 0.7}s`,
                 animationDuration: `${5 + (i % 3) * 2}s`,
                 filter: 'blur(3px)',
-                boxShadow: '0 0 60px rgba(251, 191, 36, 0.6), 0 0 100px rgba(251, 191, 36, 0.4)'
+                boxShadow: '0 0 60px rgba(20, 184, 166, 0.6), 0 0 100px rgba(20, 184, 166, 0.4)'
               }}
             />
           ))}
         </div>
 
         <div className="absolute inset-0 pointer-events-none opacity-30">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-rose-500/5 via-transparent to-transparent animate-wave"></div>
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-l from-pink-500/5 via-transparent to-transparent animate-wave-reverse"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-cyan-500/5 via-transparent to-transparent animate-wave"></div>
+          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-l from-teal-500/5 via-transparent to-transparent animate-wave-reverse"></div>
         </div>
 
         {[...Array(40)].map((_, i) => (
