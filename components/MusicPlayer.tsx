@@ -10,26 +10,94 @@ interface MusicPlayerProps {
   isDarkMode?: boolean
 }
 
+interface LyricLine {
+  time: number
+  text: string
+}
+
 const songs = [
   {
     title: 'Husn',
     src: '/Husn_-_Djjohal.fm.mp3',
-    lyrics: `Teri husn ki tareef karun\nYa apni kismat ki?\nDono hi meri nazar mein\nKhuda ki ibadat si\n\nTere husn ki tareef karun\nYa apni kismat ki?\nDono hi meri nazar mein\nKhuda ki ibadat si\n\nMein kaise keh doon?\nMein kya keh doon?\nKaise bayan karun?\nKya bayan karun?\n\nTu hai bada khushnaseeb\nJo tujhko mil gayi hoon\nJo tere liye bani hoon\nTere liye saji hoon`
+    lyrics: [
+      { time: 0, text: 'Teri husn ki tareef karun' },
+      { time: 4, text: 'Ya apni kismat ki?' },
+      { time: 8, text: 'Dono hi meri nazar mein' },
+      { time: 12, text: 'Khuda ki ibadat si' },
+      { time: 16, text: '' },
+      { time: 17, text: 'Tere husn ki tareef karun' },
+      { time: 21, text: 'Ya apni kismat ki?' },
+      { time: 25, text: 'Dono hi meri nazar mein' },
+      { time: 29, text: 'Khuda ki ibadat si' },
+      { time: 33, text: '' },
+      { time: 34, text: 'Mein kaise keh doon?' },
+      { time: 38, text: 'Mein kya keh doon?' },
+      { time: 42, text: 'Kaise bayan karun?' },
+      { time: 46, text: 'Kya bayan karun?' },
+      { time: 50, text: '' },
+      { time: 51, text: 'Tu hai bada khushnaseeb' },
+      { time: 55, text: 'Jo tujhko mil gayi hoon' },
+      { time: 59, text: 'Jo tere liye bani hoon' },
+      { time: 63, text: 'Tere liye saji hoon' },
+    ]
   },
   {
     title: 'Maruvarthai',
     src: '/Maru_Varthai_Pesathey_-_Sid_Sriram_(1).mp3',
-    lyrics: `Maruvaarthai pesathe\nManaivi sirippale\nAruvaarthai pesathe\nArugile varugaiyil\n\nKalai neram vaaitha\nVelai neram kaaitha\nNilavu paarthu konde\nNinaivugal serthu konde\n\nMaruvaarthai pesathe\nManaivi sirippale\nAruvaarthai pesathe\nArugile varugaiyil`
+    lyrics: [
+      { time: 0, text: 'Maruvaarthai pesathe' },
+      { time: 4, text: 'Manaivi sirippale' },
+      { time: 8, text: 'Aruvaarthai pesathe' },
+      { time: 12, text: 'Arugile varugaiyil' },
+      { time: 16, text: '' },
+      { time: 17, text: 'Kalai neram vaaitha' },
+      { time: 21, text: 'Velai neram kaaitha' },
+      { time: 25, text: 'Nilavu paarthu konde' },
+      { time: 29, text: 'Ninaivugal serthu konde' },
+      { time: 33, text: '' },
+      { time: 34, text: 'Maruvaarthai pesathe' },
+      { time: 38, text: 'Manaivi sirippale' },
+      { time: 42, text: 'Aruvaarthai pesathe' },
+      { time: 46, text: 'Arugile varugaiyil' },
+    ]
   },
   {
     title: 'Jeena Jeena',
     src: '/Jeena_Jeena_Badlapur-(Mr-Jat.in)_(1).mp3',
-    lyrics: `Jeena jeena, jeena jeena\nKaise jeena, jeena jeena\nKaise jeena tere bin ab jeena\n\nKya khabar kya pata kis din se\nKya khabar kya pata kis kshan se\nJo tujhe dekha toh yeh jaana sanam\nPyar hota hai deewana sanam\n\nTere bin ab na lenge ik bhi dum\nTujhe kitna chahne lage hum\n\nJeena jeena, jeena jeena\nKaise jeena, jeena jeena`
+    lyrics: [
+      { time: 0, text: 'Jeena jeena, jeena jeena' },
+      { time: 4, text: 'Kaise jeena, jeena jeena' },
+      { time: 8, text: 'Kaise jeena tere bin ab jeena' },
+      { time: 12, text: '' },
+      { time: 13, text: 'Kya khabar kya pata kis din se' },
+      { time: 17, text: 'Kya khabar kya pata kis kshan se' },
+      { time: 21, text: 'Jo tujhe dekha toh yeh jaana sanam' },
+      { time: 25, text: 'Pyar hota hai deewana sanam' },
+      { time: 29, text: '' },
+      { time: 30, text: 'Tere bin ab na lenge ik bhi dum' },
+      { time: 34, text: 'Tujhe kitna chahne lage hum' },
+      { time: 38, text: '' },
+      { time: 39, text: 'Jeena jeena, jeena jeena' },
+      { time: 43, text: 'Kaise jeena, jeena jeena' },
+    ]
   },
   {
     title: 'Kinavu Kondu',
     src: '/Kinavu_Kondu.mp3',
-    lyrics: `Kinavu kondu vanthen\nNee thaanae kaNdi pidithen\nUnai aNaithu kondiruntha en manasu\nUyir endru solluthae\n\nKaNgaL kooda maRaipathu etharku?\nUllamae kooda maraipathu etharku?\n\nKaNNae nee vendum endru sonnathadi\nKaNdu naan konden unai\nVaaN nee vendum endru sonnathadi\nVaNduvinai seiduvithennai`
+    lyrics: [
+      { time: 0, text: 'Kinavu kondu vanthen' },
+      { time: 4, text: 'Nee thaanae kaNdi pidithen' },
+      { time: 8, text: 'Unai aNaithu kondiruntha en manasu' },
+      { time: 12, text: 'Uyir endru solluthae' },
+      { time: 16, text: '' },
+      { time: 17, text: 'KaNgaL kooda maRaipathu etharku?' },
+      { time: 21, text: 'Ullamae kooda maraipathu etharku?' },
+      { time: 25, text: '' },
+      { time: 26, text: 'KaNNae nee vendum endru sonnathadi' },
+      { time: 30, text: 'KaNdu naan konden unai' },
+      { time: 34, text: 'VaaN nee vendum endru sonnathadi' },
+      { time: 38, text: 'VaNduvinai seiduvithennai' },
+    ]
   }
 ]
 
@@ -40,7 +108,9 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
   const [volume, setVolume] = useState(70)
   const [currentSongIndex, setCurrentSongIndex] = useState(0)
   const [showLyrics, setShowLyrics] = useState(false)
+  const [currentLyricIndex, setCurrentLyricIndex] = useState(0)
   const audioRef = useRef<HTMLAudioElement>(null)
+  const lyricsContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const audio = audioRef.current
@@ -81,6 +151,25 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
       audioRef.current.volume = volume / 100
     }
   }, [volume])
+
+  useEffect(() => {
+    const lyrics = songs[currentSongIndex].lyrics
+    const currentIndex = lyrics.findLastIndex(line => line.time <= currentTime)
+    if (currentIndex !== -1 && currentIndex !== currentLyricIndex) {
+      setCurrentLyricIndex(currentIndex)
+
+      if (lyricsContainerRef.current && showLyrics) {
+        const activeLine = lyricsContainerRef.current.children[currentIndex] as HTMLElement
+        if (activeLine) {
+          activeLine.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }
+    }
+  }, [currentTime, currentSongIndex, showLyrics])
+
+  useEffect(() => {
+    setCurrentLyricIndex(0)
+  }, [currentSongIndex])
 
   const togglePlayPause = () => {
     const audio = audioRef.current
@@ -200,23 +289,23 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
 
     {showLyrics && (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+        className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl animate-in fade-in duration-300"
         onClick={() => setShowLyrics(false)}
       >
-        <Card
-          className={`relative w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 ${isDarkMode ? 'bg-slate-900/95 border-white/10' : 'bg-white/95 border-rose-200'}`}
+        <div
+          className="h-full w-full flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={`sticky top-0 z-10 flex items-center justify-between p-6 backdrop-blur-sm ${isDarkMode ? 'bg-slate-900/90 border-b border-white/10' : 'bg-white/90 border-b border-rose-200'}`}>
+          <div className={`flex items-center justify-between p-6 backdrop-blur-sm ${isDarkMode ? 'bg-slate-900/50 border-b border-white/10' : 'bg-white/10 border-b border-white/20'}`}>
             <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg ${isDarkMode ? 'bg-gradient-to-br from-cyan-400 to-teal-400' : 'bg-gradient-to-br from-rose-400 to-pink-400'}`}>
-                <Music2 className="w-6 h-6 text-white" />
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg ${isDarkMode ? 'bg-gradient-to-br from-cyan-400 to-teal-400' : 'bg-gradient-to-br from-rose-400 to-pink-400'}`}>
+                <Music2 className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                <h2 className="text-3xl font-bold text-white">
                   {songs[currentSongIndex].title}
                 </h2>
-                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+                <p className="text-sm text-gray-400">
                   Song Lyrics
                 </p>
               </div>
@@ -225,37 +314,55 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
               onClick={() => setShowLyrics(false)}
               variant="ghost"
               size="icon"
-              className={`w-10 h-10 rounded-full ${isDarkMode ? 'hover:bg-white/10 text-white' : 'hover:bg-rose-100 text-slate-900'}`}
+              className="w-12 h-12 rounded-full hover:bg-white/10 text-white"
             >
-              <X className="w-5 h-5" />
+              <X className="w-6 h-6" />
             </Button>
           </div>
 
-          <div className="p-8 overflow-y-auto max-h-[calc(80vh-120px)]">
-            <div className={`text-center space-y-4 ${isDarkMode ? 'text-gray-300' : 'text-slate-700'}`}>
-              {songs[currentSongIndex].lyrics.split('\n').map((line, index) => (
-                <p
+          <div
+            ref={lyricsContainerRef}
+            className="flex-1 overflow-y-auto px-8 py-16 flex items-center justify-center"
+          >
+            <div className="max-w-4xl w-full space-y-8">
+              {songs[currentSongIndex].lyrics.map((line, index) => (
+                <div
                   key={index}
-                  className={`text-lg leading-relaxed animate-in fade-in slide-in-from-bottom-2 ${line.trim() === '' ? 'h-4' : ''}`}
-                  style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }}
+                  className={`text-center transition-all duration-500 ${
+                    line.text.trim() === '' ? 'h-8' : ''
+                  }`}
                 >
-                  {line || '\u00A0'}
-                </p>
+                  {line.text && (
+                    <p
+                      className={`text-3xl md:text-4xl lg:text-5xl font-semibold leading-relaxed transition-all duration-500 ${
+                        index === currentLyricIndex
+                          ? isDarkMode
+                            ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 scale-110 drop-shadow-[0_0_30px_rgba(34,211,238,0.5)]'
+                            : 'text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-pink-400 scale-110 drop-shadow-[0_0_30px_rgba(251,113,133,0.5)]'
+                          : index < currentLyricIndex
+                          ? 'text-gray-600 scale-95 opacity-40'
+                          : 'text-gray-500 scale-90 opacity-30'
+                      }`}
+                    >
+                      {line.text}
+                    </p>
+                  )}
+                </div>
               ))}
             </div>
           </div>
 
-          <div className={`sticky bottom-0 p-4 backdrop-blur-sm ${isDarkMode ? 'bg-slate-900/90 border-t border-white/10' : 'bg-white/90 border-t border-rose-200'}`}>
-            <div className="flex items-center gap-4">
+          <div className={`p-6 backdrop-blur-sm ${isDarkMode ? 'bg-slate-900/50 border-t border-white/10' : 'bg-white/10 border-t border-white/20'}`}>
+            <div className="max-w-4xl mx-auto flex items-center gap-6">
               <Button
                 onClick={(e) => {
                   e.stopPropagation()
                   playPrevious()
                 }}
-                size="sm"
-                className={`rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-200 hover:bg-rose-300'}`}
+                size="lg"
+                className={`w-12 h-12 rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-500/20 hover:bg-rose-500/30'}`}
               >
-                <SkipBack className={`h-4 w-4 ${isDarkMode ? 'text-cyan-400' : 'text-rose-700'}`} />
+                <SkipBack className={`h-5 w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-400'}`} />
               </Button>
 
               <Button
@@ -263,13 +370,13 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
                   e.stopPropagation()
                   togglePlayPause()
                 }}
-                size="sm"
-                className={`rounded-full shadow-lg ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600' : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600'}`}
+                size="lg"
+                className={`w-16 h-16 rounded-full shadow-lg ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600' : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600'}`}
               >
                 {isPlaying ? (
-                  <Pause className="h-4 w-4" fill="white" />
+                  <Pause className="h-6 w-6" fill="white" />
                 ) : (
-                  <Play className="h-4 w-4" fill="white" />
+                  <Play className="h-6 w-6" fill="white" />
                 )}
               </Button>
 
@@ -278,10 +385,10 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
                   e.stopPropagation()
                   playNext()
                 }}
-                size="sm"
-                className={`rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-200 hover:bg-rose-300'}`}
+                size="lg"
+                className={`w-12 h-12 rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-500/20 hover:bg-rose-500/30'}`}
               >
-                <SkipForward className={`h-4 w-4 ${isDarkMode ? 'text-cyan-400' : 'text-rose-700'}`} />
+                <SkipForward className={`h-5 w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-400'}`} />
               </Button>
 
               <div className="flex-1">
@@ -292,14 +399,14 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
                   onValueChange={handleSeek}
                   className="cursor-pointer"
                 />
-                <div className={`flex justify-between text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+                <div className="flex justify-between text-xs mt-2 text-gray-400">
                   <span>{formatTime(currentTime)}</span>
                   <span>{formatTime(duration)}</span>
                 </div>
               </div>
             </div>
           </div>
-        </Card>
+        </div>
       </div>
     )}
     </>
