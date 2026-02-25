@@ -243,18 +243,19 @@ export default function Home() {
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(25)].map((_, i) => (
+          {[...Array(15)].map((_, i) => (
             <div
               key={`golden-${i}`}
-              className="absolute rounded-full bg-gradient-to-br from-amber-400 via-yellow-400 to-orange-400 animate-golden-particle animate-golden-shimmer"
+              className="absolute rounded-full bg-gradient-to-br from-amber-300 via-yellow-400 to-amber-400 animate-float opacity-60"
               style={{
-                left: `${(i * 13 + 5) % 95}%`,
-                bottom: `${(i * 7) % 20}%`,
-                width: `${4 + (i % 3) * 2}px`,
-                height: `${4 + (i % 3) * 2}px`,
-                animationDelay: `${i * 0.3}s`,
-                animationDuration: `${3 + (i % 3)}s`,
-                filter: 'blur(1px)'
+                left: `${(i * 17 + 10) % 90}%`,
+                top: `${(i * 13 + 15) % 85}%`,
+                width: `${30 + (i % 4) * 20}px`,
+                height: `${30 + (i % 4) * 20}px`,
+                animationDelay: `${i * 0.5}s`,
+                animationDuration: `${4 + (i % 3) * 2}s`,
+                filter: 'blur(2px)',
+                boxShadow: '0 0 40px rgba(251, 191, 36, 0.5), 0 0 80px rgba(251, 191, 36, 0.3)'
               }}
             />
           ))}
