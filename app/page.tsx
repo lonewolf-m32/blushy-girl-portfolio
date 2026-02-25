@@ -57,6 +57,7 @@ export default function Home() {
     about: 'in',
     skills: 'hidden',
     projects: 'hidden',
+    gallery: 'hidden',
     contact: 'hidden'
   })
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down')
@@ -86,7 +87,7 @@ export default function Home() {
       })
     }, observerOptions)
 
-    const sections = ['about', 'skills', 'projects', 'contact']
+    const sections = ['about', 'skills', 'projects', 'gallery', 'contact']
     sections.forEach(id => {
       const element = document.getElementById(id)
       if (element) observer.observe(element)
@@ -97,7 +98,7 @@ export default function Home() {
     }, 4000)
 
     const handleScroll = () => {
-      const sections = ['about', 'skills', 'projects', 'contact']
+      const sections = ['about', 'skills', 'projects', 'gallery', 'contact']
       const scrollPosition = window.scrollY + 100
       const currentScrollY = window.scrollY
 
@@ -387,6 +388,20 @@ export default function Home() {
               )}
             </a>
             <a
+              href="#gallery"
+              onClick={(e) => scrollToSection(e, 'gallery')}
+              className={`relative text-sm font-medium transition-all duration-300 ${
+                activeSection === 'gallery'
+                  ? (isDarkMode ? 'text-cyan-400' : 'text-rose-600')
+                  : isDarkMode ? 'text-white hover:text-cyan-400' : 'text-slate-600 hover:text-rose-600'
+              }`}
+            >
+              Gallery
+              {activeSection === 'gallery' && (
+                <span className={`absolute -bottom-1 left-0 w-full h-0.5 rounded-full ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500' : 'bg-gradient-to-r from-rose-500 to-pink-500'}`}></span>
+              )}
+            </a>
+            <a
               href="#contact"
               onClick={(e) => scrollToSection(e, 'contact')}
               className={`relative text-sm font-medium transition-all duration-300 ${
@@ -479,6 +494,20 @@ export default function Home() {
             >
               Projects
               {activeSection === 'projects' && (
+                <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full ${isDarkMode ? 'bg-gradient-to-b from-cyan-500 to-teal-500' : 'bg-gradient-to-b from-rose-500 to-pink-500'}`}></span>
+              )}
+            </a>
+            <a
+              href="#gallery"
+              onClick={(e) => scrollToSection(e, 'gallery')}
+              className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
+                activeSection === 'gallery'
+                  ? (isDarkMode ? 'text-cyan-400 bg-white/5' : 'text-rose-600 bg-rose-50')
+                  : isDarkMode ? 'text-white hover:text-cyan-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+              }`}
+            >
+              Gallery
+              {activeSection === 'gallery' && (
                 <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full ${isDarkMode ? 'bg-gradient-to-b from-cyan-500 to-teal-500' : 'bg-gradient-to-b from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
@@ -802,6 +831,59 @@ export default function Home() {
                 <ChevronRight className={`h-4 w-4 animate-pulse ${isDarkMode ? 'text-cyan-500' : 'text-rose-500'}`} />
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" className="py-32 px-6 relative overflow-hidden z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className={`text-center mb-16 transition-all duration-700 ${
+            sectionAnimations.gallery === 'in' ? 'opacity-100 translate-y-0' :
+            sectionAnimations.gallery === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+            'opacity-0 translate-y-20'
+          }`}>
+            <p className={`font-bold tracking-wide mb-2 text-sm ${isDarkMode ? 'text-cyan-400' : 'text-rose-600'}`}>GALLERY</p>
+            <h2 className={`text-5xl font-bold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Photo Gallery</h2>
+            <p className={`text-xl mt-4 font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>
+              A glimpse into my world
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 relative z-10">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((item, idx) => (
+              <div
+                key={idx}
+                className={`group relative overflow-hidden rounded-2xl transition-all duration-700 hover:scale-105 hover:z-10 cursor-pointer ${
+                  sectionAnimations.gallery === 'in' ? 'opacity-100 translate-y-0' :
+                  sectionAnimations.gallery === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+                  'opacity-0 translate-y-20'
+                }`}
+                style={{
+                  transitionDelay: `${idx * 100}ms`,
+                  aspectRatio: '1/1'
+                }}
+              >
+                <div className={`absolute inset-0 transition-all duration-500 ${isDarkMode ? 'bg-slate-800/50' : 'bg-gradient-to-br from-rose-100 to-pink-100'}`}>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className={`text-center transition-all duration-300 group-hover:scale-110 ${isDarkMode ? 'text-gray-400' : 'text-slate-400'}`}>
+                      <div className={`w-16 h-16 mx-auto mb-2 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-slate-700/50' : 'bg-white/50'}`}>
+                        <span className="text-2xl">+</span>
+                      </div>
+                      <p className="text-sm font-medium">Add Photo</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none ${isDarkMode ? 'bg-gradient-to-br from-cyan-500/30 via-transparent to-teal-500/30' : 'bg-gradient-to-br from-rose-500/30 via-transparent to-pink-500/30'}`}></div>
+
+                <div className={`absolute inset-0 border-2 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-2xl ${isDarkMode ? 'border-cyan-400/50' : 'border-rose-400/50'}`}></div>
+
+                <div className={`absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-all duration-500 ${isDarkMode ? 'bg-gradient-to-t from-black/90 to-transparent' : 'bg-gradient-to-t from-white/90 to-transparent'}`}>
+                  <p className={`text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Photo {item}</p>
+                  <p className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>Click to view</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
