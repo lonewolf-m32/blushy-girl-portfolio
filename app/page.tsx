@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Github, Linkedin, Mail, ArrowRight, Code2, Database, Palette, ChevronLeft, ChevronRight } from "lucide-react"
+import MusicPlayer from "@/components/MusicPlayer"
 
 const projects = [
   {
@@ -387,6 +388,9 @@ export default function Home() {
 
       <section id="about" className="min-h-screen flex items-center justify-center px-6 pt-20 relative z-10">
         <div className={`max-w-7xl w-full transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="mb-12 max-w-md mx-auto lg:mx-0">
+            <MusicPlayer />
+          </div>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div className="space-y-2">
