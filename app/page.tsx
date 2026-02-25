@@ -242,7 +242,7 @@ export default function Home() {
           <img
             src="/AAGiea67SZQ_1760388181671.jpg"
             alt="Background"
-            className="w-full h-full object-cover animate-bg-rotate-subtle"
+            className={`w-full h-full object-cover animate-bg-rotate-subtle transition-all duration-500 ${isDarkMode ? 'grayscale' : ''}`}
           />
         </div>
         <div className={`absolute inset-0 backdrop-blur-sm transition-all duration-500 ${isDarkMode ? 'bg-gradient-to-br from-black/85 via-black/90 to-black/85' : 'bg-gradient-to-br from-white/85 via-white/80 to-white/85'}`}></div>
