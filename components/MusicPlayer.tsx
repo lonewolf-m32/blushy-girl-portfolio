@@ -24,6 +24,12 @@ export default function MusicPlayer() {
     audio.addEventListener('loadedmetadata', updateDuration)
     audio.addEventListener('ended', () => setIsPlaying(false))
 
+    audio.play().then(() => {
+      setIsPlaying(true)
+    }).catch(() => {
+      setIsPlaying(false)
+    })
+
     return () => {
       audio.removeEventListener('timeupdate', updateTime)
       audio.removeEventListener('loadedmetadata', updateDuration)
