@@ -52,9 +52,44 @@ export default function Home() {
   const [lastScrollY, setLastScrollY] = useState(0)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
+  const [touchRipples, setTouchRipples] = useState<Array<{id: number, x: number, y: number}>>([])
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const [showSwipeHint, setShowSwipeHint] = useState(true)
+
+  const minSwipeDistance = 50
 
   useEffect(() => {
     setIsVisible(true)
+
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -100px 0px'
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => new Set(prev).add(entry.target.id))
+        }
+      })
+    }, observerOptions)
+
+    const sections = ['about', 'skills', 'projects', 'contact']
+    sections.forEach(id => {
+      const element = document.getElementById(id)
+      if (element) observer.observe(element)
+    })
+
+    const swipeHintTimer = setTimeout(() => {
+      setShowSwipeHint(false)
+    }, 4000)
+
+    return () => {
+      observer.disconnect()
+      clearTimeout(swipeHintTimer)
+    }
 
     const handleScroll = () => {
       const sections = ['about', 'skills', 'projects', 'contact']
@@ -99,7 +134,43 @@ export default function Home() {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('mousemove', handleMouseMove)
     }
-  }, [])
+  }, [lastScrollY])
+
+  const createTouchRipple = (e: React.TouchEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.touches[0].clientX - rect.left
+    const y = e.touches[0].clientY - rect.top
+    const id = Date.now()
+
+    setTouchRipples(prev => [...prev, { id, x, y }])
+    setTimeout(() => {
+      setTouchRipples(prev => prev.filter(ripple => ripple.id !== id))
+    }, 600)
+  }
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+    setShowSwipeHint(false)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      nextProject()
+    }
+    if (isRightSwipe) {
+      prevProject()
+    }
+  }
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault()
@@ -407,13 +478,13 @@ export default function Home() {
                 Eager to learn, grow, and contribute to innovative projects with modern technologies.
               </p>
               <div className="flex gap-4 pt-4">
-                <Button className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-8">
+                <Button className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-8 active:scale-95 transition-transform">
                   View Projects <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button
                   onClick={() => window.open('/AmalenduA.CV.pdf', '_blank')}
                   variant="outline"
-                  className="border-slate-300 hover:border-rose-500 hover:text-rose-500"
+                  className="border-slate-300 hover:border-rose-500 hover:text-rose-500 active:scale-95 transition-transform"
                 >
                   Download CV
                 </Button>
@@ -479,7 +550,9 @@ export default function Home() {
 
       <section id="skills" className="py-32 px-6 relative overflow-hidden z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 transition-all duration-700 ${
+            visibleSections.has('skills') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}>
             <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">EXPERTISE</p>
             <h2 className="text-5xl font-bold text-slate-900">Skills & Technologies</h2>
           </div>
@@ -488,15 +561,39 @@ export default function Home() {
             {skills.map((skillSet, idx) => (
               <Card
                 key={idx}
-                className="p-6 hover:shadow-xl transition-all duration-300 border-slate-200 hover:scale-105 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow"
+                onTouchStart={createTouchRipple}
+                className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:scale-105 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
+                  visibleSections.has('skills') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+                }`}
                 style={{
-                  transform: `translate(${mousePosition.x * (idx % 2 === 0 ? 5 : -5)}px, ${mousePosition.y * (idx % 2 === 0 ? 5 : -5)}px)`
+                  transform: `translate(${mousePosition.x * (idx % 2 === 0 ? 5 : -5)}px, ${mousePosition.y * (idx % 2 === 0 ? 5 : -5)}px)`,
+                  transitionDelay: `${idx * 100}ms`
                 }}
               >
+                {touchRipples.map(ripple => (
+                  <span
+                    key={ripple.id}
+                    className="absolute rounded-full bg-rose-400/30 pointer-events-none animate-ripple"
+                    style={{
+                      left: ripple.x,
+                      top: ripple.y,
+                      width: '20px',
+                      height: '20px',
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                  />
+                ))}
                 <h3 className="text-xl font-bold text-slate-900 mb-4">{skillSet.category}</h3>
                 <div className="flex flex-wrap gap-2">
                   {skillSet.items.map((skill, index) => (
-                    <Badge key={index} variant="secondary" className="bg-slate-100 text-slate-800 font-semibold hover:bg-rose-100 hover:text-rose-700 transition-colors">
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="bg-slate-100 text-slate-800 font-semibold hover:bg-rose-100 hover:text-rose-700 transition-all active:scale-90"
+                      style={{
+                        animationDelay: `${(idx * 100) + (index * 50)}ms`
+                      }}
+                    >
                       {skill}
                     </Badge>
                   ))}
@@ -509,13 +606,22 @@ export default function Home() {
 
       <section id="projects" className="py-32 px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 transition-all duration-700 ${
+            visibleSections.has('projects') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}>
             <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">PORTFOLIO</p>
             <h2 className="text-5xl font-bold text-slate-900">Featured Projects</h2>
           </div>
 
-          <div className="relative perspective-1000">
-            <div className="overflow-hidden rounded-2xl">
+          <div className={`relative perspective-1000 transition-all duration-700 ${
+            visibleSections.has('projects') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+          }`}>
+            <div
+              className="overflow-hidden rounded-2xl"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
               <Card className={`border-rose-200 overflow-hidden transition-all duration-500 ${
                 isTransitioning ? 'scale-95 opacity-50 rotate-y-12' : 'scale-100 opacity-100 rotate-y-0'
               }`}>
@@ -573,7 +679,7 @@ export default function Home() {
             <button
               onClick={prevProject}
               disabled={isTransitioning}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-rose-50 transition-all hover:scale-110 hover:shadow-xl hover:-translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-3 md:p-3 w-12 h-12 md:w-auto md:h-auto rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-rose-50 transition-all hover:scale-110 hover:shadow-xl hover:-translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group active:scale-95"
             >
               <ChevronLeft className="h-6 w-6 text-slate-900 group-hover:text-rose-600 transition-colors" />
             </button>
@@ -581,12 +687,12 @@ export default function Home() {
             <button
               onClick={nextProject}
               disabled={isTransitioning}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-rose-50 transition-all hover:scale-110 hover:shadow-xl hover:translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-3 md:p-3 w-12 h-12 md:w-auto md:h-auto rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-rose-50 transition-all hover:scale-110 hover:shadow-xl hover:translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group active:scale-95"
             >
               <ChevronRight className="h-6 w-6 text-slate-900 group-hover:text-rose-600 transition-colors" />
             </button>
 
-            <div className="flex justify-center gap-2 mt-8">
+            <div className="flex justify-center gap-2 mt-8 relative">
               {projects.map((_, idx) => (
                 <button
                   key={idx}
@@ -600,7 +706,7 @@ export default function Home() {
                     }
                   }}
                   disabled={isTransitioning}
-                  className={`h-2 rounded-full transition-all duration-300 hover:scale-125 disabled:cursor-not-allowed ${
+                  className={`h-2 rounded-full transition-all duration-300 hover:scale-125 disabled:cursor-not-allowed active:scale-90 ${
                     idx === currentProject
                       ? 'w-8 bg-gradient-to-r from-rose-500 to-pink-500 shadow-lg'
                       : 'w-2 bg-slate-300 hover:bg-rose-300'
@@ -608,23 +714,39 @@ export default function Home() {
                 />
               ))}
             </div>
+
+            {showSwipeHint && (
+              <div className="md:hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg animate-bounce-in">
+                <ChevronLeft className="h-4 w-4 text-rose-500 animate-pulse" />
+                <span className="text-xs font-medium text-slate-700">Swipe to explore</span>
+                <ChevronRight className="h-4 w-4 text-rose-500 animate-pulse" />
+              </div>
+            )}
           </div>
         </div>
       </section>
 
       <section id="contact" className="py-32 px-6 relative overflow-hidden z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">GET IN TOUCH</p>
-          <h2 className="text-5xl font-bold text-slate-900 mb-6">Let's Connect</h2>
-          <p className="text-xl text-slate-800 mb-12 font-medium">
-            I'm actively looking for opportunities to start my career. Let's connect and discuss how I can contribute to your team!
-          </p>
+          <div className={`transition-all duration-700 ${
+            visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+          }`}>
+            <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">GET IN TOUCH</p>
+            <h2 className="text-5xl font-bold text-slate-900 mb-6">Let's Connect</h2>
+            <p className="text-xl text-slate-800 mb-12 font-medium">
+              I'm actively looking for opportunities to start my career. Let's connect and discuss how I can contribute to your team!
+            </p>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-12 relative z-10">
             <Card
-              className="p-6 hover:shadow-xl transition-all border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow"
+              onTouchStart={createTouchRipple}
+              className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
+                visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+              }`}
               style={{
-                transform: `translate(${mousePosition.x * 8}px, ${mousePosition.y * 8}px)`
+                transform: `translate(${mousePosition.x * 8}px, ${mousePosition.y * 8}px)`,
+                transitionDelay: '100ms'
               }}
             >
               <Mail className="h-8 w-8 mx-auto mb-4 text-rose-500" />
@@ -633,7 +755,13 @@ export default function Home() {
             </Card>
 
             <Card
-              className="p-6 hover:shadow-xl transition-all border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow"
+              onTouchStart={createTouchRipple}
+              className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow active:scale-95 relative overflow-hidden ${
+                visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+              }`}
+              style={{
+                transitionDelay: '200ms'
+              }}
             >
               <Github className="h-8 w-8 mx-auto mb-4 text-rose-500" />
               <h3 className="font-bold text-slate-900 mb-2">GitHub</h3>
@@ -641,9 +769,13 @@ export default function Home() {
             </Card>
 
             <Card
-              className="p-6 hover:shadow-xl transition-all border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow"
+              onTouchStart={createTouchRipple}
+              className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
+                visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+              }`}
               style={{
-                transform: `translate(${mousePosition.x * -8}px, ${mousePosition.y * -8}px)`
+                transform: `translate(${mousePosition.x * -8}px, ${mousePosition.y * -8}px)`,
+                transitionDelay: '300ms'
               }}
             >
               <Linkedin className="h-8 w-8 mx-auto mb-4 text-rose-500" />
@@ -659,7 +791,12 @@ export default function Home() {
               const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
               window.open(whatsappUrl, '_blank')
             }}
-            className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-12 py-6 text-lg"
+            className={`bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-12 py-6 text-lg active:scale-95 transition-all duration-700 ${
+              visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+            }`}
+            style={{
+              transitionDelay: '400ms'
+            }}
           >
             Send Message <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
