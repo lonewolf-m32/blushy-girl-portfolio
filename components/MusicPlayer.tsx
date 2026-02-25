@@ -132,10 +132,9 @@ export default function MusicPlayer() {
             <Button
               onClick={playPrevious}
               size="lg"
-              variant="ghost"
-              className="w-10 h-10 rounded-full hover:bg-rose-100 transition-all duration-300"
+              className="w-10 h-10 rounded-full bg-rose-200 hover:bg-rose-300 transition-all duration-300"
             >
-              <SkipBack className="h-5 w-5 text-rose-500" />
+              <SkipBack className="h-5 w-5 text-rose-700" />
             </Button>
 
             <Button
@@ -153,10 +152,9 @@ export default function MusicPlayer() {
             <Button
               onClick={playNext}
               size="lg"
-              variant="ghost"
-              className="w-10 h-10 rounded-full hover:bg-rose-100 transition-all duration-300"
+              className="w-10 h-10 rounded-full bg-rose-200 hover:bg-rose-300 transition-all duration-300"
             >
-              <SkipForward className="h-5 w-5 text-rose-500" />
+              <SkipForward className="h-5 w-5 text-rose-700" />
             </Button>
           </div>
 
