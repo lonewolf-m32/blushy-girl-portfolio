@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Github, Linkedin, Mail, ArrowRight, Code2, Database, Palette, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react"
+import { Github, Linkedin, Mail, ArrowRight, Code2, Database, Palette, ChevronLeft, ChevronRight, MessageCircle, Moon, Sun } from "lucide-react"
 import MusicPlayer from "@/components/MusicPlayer"
 
 const projects = [
@@ -65,6 +65,7 @@ export default function Home() {
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [showSwipeHint, setShowSwipeHint] = useState(true)
   const [isMounted, setIsMounted] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
   const minSwipeDistance = 50
 
@@ -230,7 +231,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden">
+    <main className={`min-h-screen relative overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-black' : ''}`}>
       <div className="fixed inset-0 z-0">
         <div
           className="w-full h-full transition-transform duration-700 ease-out animate-bg-zoom"
@@ -244,7 +245,7 @@ export default function Home() {
             className="w-full h-full object-cover animate-bg-rotate-subtle"
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-br from-white/85 via-white/80 to-white/85 backdrop-blur-sm"></div>
+        <div className={`absolute inset-0 backdrop-blur-sm transition-all duration-500 ${isDarkMode ? 'bg-gradient-to-br from-black/85 via-black/90 to-black/85' : 'bg-gradient-to-br from-white/85 via-white/80 to-white/85'}`}></div>
 
         <div
           className="absolute inset-0 bg-gradient-to-br from-rose-100/40 via-pink-50/30 to-fuchsia-100/40 animate-mesh-gradient"
@@ -320,29 +321,36 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="fixed top-0 left-0 w-full h-1 bg-slate-200/50 z-50">
+      <div className={`fixed top-0 left-0 w-full h-1 z-50 transition-colors duration-500 ${isDarkMode ? 'bg-white/10' : 'bg-slate-200/50'}`}>
         <div
           className="h-full bg-gradient-to-r from-rose-400 via-pink-400 to-fuchsia-400 transition-all duration-300 ease-out"
           style={{ width: `${scrollProgress}%` }}
         ></div>
       </div>
 
-      <nav className={`fixed top-0 left-0 right-0 bg-white/70 backdrop-blur-md z-40 border-b border-rose-100/50 transition-transform duration-300 ease-out ${
+      <nav className={`fixed top-0 left-0 right-0 backdrop-blur-md z-40 border-b transition-all duration-500 ease-out ${
         showNavbar ? 'translate-y-0' : '-translate-y-full'
-      }`}>
+      } ${isDarkMode ? 'bg-black/70 border-white/10' : 'bg-white/70 border-rose-100/50'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">
+          <div className={`text-2xl font-bold transition-all duration-500 ${isDarkMode ? 'text-white' : 'bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent'}`}>
             Blushy Girl
           </div>
 
           <div className="hidden md:flex gap-8 items-center">
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`p-2 rounded-full transition-all duration-300 ${isDarkMode ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
+              aria-label="Toggle dark mode"
+            >
+              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
             <a
               href="#about"
               onClick={(e) => scrollToSection(e, 'about')}
               className={`relative text-sm font-medium transition-all duration-300 ${
                 activeSection === 'about'
                   ? 'text-rose-600'
-                  : 'text-slate-600 hover:text-rose-600'
+                  : isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-600 hover:text-rose-600'
               }`}
             >
               About
@@ -356,7 +364,7 @@ export default function Home() {
               className={`relative text-sm font-medium transition-all duration-300 ${
                 activeSection === 'skills'
                   ? 'text-rose-600'
-                  : 'text-slate-600 hover:text-rose-600'
+                  : isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-600 hover:text-rose-600'
               }`}
             >
               Skills
@@ -370,7 +378,7 @@ export default function Home() {
               className={`relative text-sm font-medium transition-all duration-300 ${
                 activeSection === 'projects'
                   ? 'text-rose-600'
-                  : 'text-slate-600 hover:text-rose-600'
+                  : isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-600 hover:text-rose-600'
               }`}
             >
               Projects
@@ -384,7 +392,7 @@ export default function Home() {
               className={`relative text-sm font-medium transition-all duration-300 ${
                 activeSection === 'contact'
                   ? 'text-rose-600'
-                  : 'text-slate-600 hover:text-rose-600'
+                  : isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-600 hover:text-rose-600'
               }`}
             >
               Contact
@@ -394,33 +402,42 @@ export default function Home() {
             </a>
           </div>
 
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none group"
-            aria-label="Toggle menu"
-          >
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`md:hidden p-2 rounded-full transition-all duration-300 ${isDarkMode ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-700'}`}
+              aria-label="Toggle dark mode"
+            >
+              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none group"
+              aria-label="Toggle menu"
+            >
             <span
-              className={`w-6 h-0.5 bg-rose-600 rounded-full transition-all duration-300 ease-out ${
+              className={`w-6 h-0.5 rounded-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-white' : 'bg-rose-600'} ${
                 isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
               }`}
             ></span>
             <span
-              className={`w-6 h-0.5 bg-rose-600 rounded-full transition-all duration-300 ease-out ${
+              className={`w-6 h-0.5 rounded-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-white' : 'bg-rose-600'} ${
                 isMobileMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
               }`}
             ></span>
             <span
-              className={`w-6 h-0.5 bg-rose-600 rounded-full transition-all duration-300 ease-out ${
+              className={`w-6 h-0.5 rounded-full transition-all duration-300 ease-out ${isDarkMode ? 'bg-white' : 'bg-rose-600'} ${
                 isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
               }`}
             ></span>
           </button>
+          </div>
         </div>
 
         <div
-          className={`md:hidden fixed top-[73px] left-0 right-0 bg-white/95 backdrop-blur-md shadow-2xl transition-all duration-500 ease-out border-b border-rose-100/50 overflow-hidden ${
+          className={`md:hidden fixed top-[73px] left-0 right-0 backdrop-blur-md shadow-2xl transition-all duration-500 ease-out border-b overflow-hidden ${
             isMobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
-          }`}
+          } ${isDarkMode ? 'bg-black/95 border-white/10' : 'bg-white/95 border-rose-100/50'}`}
         >
           <div className="flex flex-col p-6 gap-4">
             <a
@@ -429,7 +446,7 @@ export default function Home() {
               className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
                 activeSection === 'about'
                   ? 'text-rose-600 bg-rose-50'
-                  : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+                  : isDarkMode ? 'text-white hover:text-rose-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
               }`}
             >
               About
@@ -443,7 +460,7 @@ export default function Home() {
               className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
                 activeSection === 'skills'
                   ? 'text-rose-600 bg-rose-50'
-                  : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+                  : isDarkMode ? 'text-white hover:text-rose-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
               }`}
             >
               Skills
@@ -457,7 +474,7 @@ export default function Home() {
               className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
                 activeSection === 'projects'
                   ? 'text-rose-600 bg-rose-50'
-                  : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+                  : isDarkMode ? 'text-white hover:text-rose-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
               }`}
             >
               Projects
@@ -471,7 +488,7 @@ export default function Home() {
               className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
                 activeSection === 'contact'
                   ? 'text-rose-600 bg-rose-50'
-                  : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+                  : isDarkMode ? 'text-white hover:text-rose-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
               }`}
             >
               Contact
@@ -518,13 +535,13 @@ export default function Home() {
               <div className="space-y-2">
                 <p className="text-rose-600 font-bold tracking-wide text-sm drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)]">FRESHER FULL STACK DEVELOPER</p>
                 <h1 className="text-6xl font-bold leading-tight">
-                  <span className="text-slate-900 drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">Hi, I'm</span>
+                  <span className={`transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900 drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]'}`}>Hi, I'm</span>
                   <span className="block bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">
                     Blushy Girl
                   </span>
                 </h1>
               </div>
-              <p className="text-xl text-slate-900 leading-relaxed font-semibold drop-shadow-[0_2px_6px_rgba(255,255,255,0.95)]">
+              <p className={`text-xl leading-relaxed font-semibold transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-900 drop-shadow-[0_2px_6px_rgba(255,255,255,0.95)]'}`}>
                 Recent graduate passionate about creating beautiful, functional web applications.
                 Eager to learn, grow, and contribute to innovative projects with modern technologies.
               </p>
@@ -535,20 +552,20 @@ export default function Home() {
                 <Button
                   onClick={() => window.open('/AmalenduA.CV.pdf', '_blank')}
                   variant="outline"
-                  className="border-slate-300 hover:border-rose-500 hover:text-rose-500 active:scale-95 transition-transform"
+                  className={`active:scale-95 transition-all duration-300 ${isDarkMode ? 'border-white/20 text-white hover:border-rose-500 hover:text-rose-400' : 'border-slate-300 hover:border-rose-500 hover:text-rose-500'}`}
                 >
                   Download CV
                 </Button>
               </div>
               <div className="flex gap-4 pt-4">
-                <a href="#" className="p-3 rounded-full border border-slate-300 hover:border-rose-500 hover:bg-rose-50 transition-all">
-                  <Github className="h-5 w-5 text-slate-600" />
+                <a href="#" className={`p-3 rounded-full border transition-all duration-300 ${isDarkMode ? 'border-white/20 hover:border-rose-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
+                  <Github className={`h-5 w-5 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-slate-600'}`} />
                 </a>
-                <a href="#" className="p-3 rounded-full border border-slate-300 hover:border-rose-500 hover:bg-rose-50 transition-all">
-                  <Linkedin className="h-5 w-5 text-slate-600" />
+                <a href="#" className={`p-3 rounded-full border transition-all duration-300 ${isDarkMode ? 'border-white/20 hover:border-rose-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
+                  <Linkedin className={`h-5 w-5 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-slate-600'}`} />
                 </a>
-                <a href="#" className="p-3 rounded-full border border-slate-300 hover:border-rose-500 hover:bg-rose-50 transition-all">
-                  <Mail className="h-5 w-5 text-slate-600" />
+                <a href="#" className={`p-3 rounded-full border transition-all duration-300 ${isDarkMode ? 'border-white/20 hover:border-rose-500 hover:bg-white/5' : 'border-slate-300 hover:border-rose-500 hover:bg-rose-50'}`}>
+                  <Mail className={`h-5 w-5 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-slate-600'}`} />
                 </a>
               </div>
             </div>
@@ -607,7 +624,7 @@ export default function Home() {
             'opacity-0 translate-y-20'
           }`}>
             <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">EXPERTISE</p>
-            <h2 className="text-5xl font-bold text-slate-900">Skills & Technologies</h2>
+            <h2 className={`text-5xl font-bold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Skills & Technologies</h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
@@ -615,7 +632,9 @@ export default function Home() {
               <Card
                 key={idx}
                 onTouchStart={createTouchRipple}
-                className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:scale-105 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
+                className={`p-6 hover:shadow-xl transition-all duration-500 hover:scale-105 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
+                  isDarkMode ? 'border-white/10 hover:border-white/30 bg-white/5' : 'border-slate-200 hover:border-rose-200 bg-white/80'
+                } ${
                   sectionAnimations.skills === 'in' ? 'opacity-100 translate-y-0' :
                   sectionAnimations.skills === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
                   'opacity-0 translate-y-20'
@@ -638,13 +657,13 @@ export default function Home() {
                     }}
                   />
                 ))}
-                <h3 className="text-xl font-bold text-slate-900 mb-4">{skillSet.category}</h3>
+                <h3 className={`text-xl font-bold mb-4 transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{skillSet.category}</h3>
                 <div className="flex flex-wrap gap-2">
                   {skillSet.items.map((skill, index) => (
                     <Badge
                       key={index}
                       variant="secondary"
-                      className="bg-slate-100 text-slate-800 font-semibold hover:bg-rose-100 hover:text-rose-700 transition-all active:scale-90"
+                      className={`font-semibold transition-all active:scale-90 ${isDarkMode ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-slate-100 text-slate-800 hover:bg-rose-100 hover:text-rose-700'}`}
                       style={{
                         animationDelay: `${(idx * 100) + (index * 50)}ms`
                       }}
@@ -667,7 +686,7 @@ export default function Home() {
             'opacity-0 translate-y-20'
           }`}>
             <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">PORTFOLIO</p>
-            <h2 className="text-5xl font-bold text-slate-900">Featured Projects</h2>
+            <h2 className={`text-5xl font-bold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Featured Projects</h2>
           </div>
 
           <div className={`relative perspective-1000 transition-all duration-700 ${
@@ -681,7 +700,9 @@ export default function Home() {
               onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
             >
-              <Card className={`border-rose-200 overflow-hidden transition-all duration-500 ${
+              <Card className={`overflow-hidden transition-all duration-500 ${
+                isDarkMode ? 'border-white/10 bg-white/5' : 'border-rose-200 bg-white'
+              } ${
                 isTransitioning ? 'scale-95 opacity-50 rotate-y-12' : 'scale-100 opacity-100 rotate-y-0'
               }`}>
                 <div className="grid lg:grid-cols-2">
@@ -705,10 +726,10 @@ export default function Home() {
                     <div className="mb-4">
                       <span className="text-sm text-rose-600 font-bold">PROJECT {currentProject + 1} / {projects.length}</span>
                     </div>
-                    <h3 className="text-4xl font-bold text-slate-900 mb-4 transition-all duration-500 hover:text-rose-600">
+                    <h3 className={`text-4xl font-bold mb-4 transition-all duration-500 ${isDarkMode ? 'text-white hover:text-rose-400' : 'text-slate-900 hover:text-rose-600'}`}>
                       {projects[currentProject].title}
                     </h3>
-                    <p className="text-slate-800 text-lg mb-6 leading-relaxed font-medium">{projects[currentProject].description}</p>
+                    <p className={`text-lg mb-6 leading-relaxed font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>{projects[currentProject].description}</p>
 
                     <div className="flex flex-wrap gap-2 mb-8">
                       {projects[currentProject].tech.map((tech, idx) => (
@@ -726,7 +747,7 @@ export default function Home() {
                       <Button className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 hover:scale-105 transition-all duration-300 hover:shadow-lg">
                         View Project
                       </Button>
-                      <Button variant="outline" className="border-slate-300 hover:border-rose-500 hover:text-rose-500 hover:scale-105 transition-all duration-300">
+                      <Button variant="outline" className={`hover:scale-105 transition-all duration-300 ${isDarkMode ? 'border-white/20 text-white hover:border-rose-500 hover:text-rose-400' : 'border-slate-300 hover:border-rose-500 hover:text-rose-500'}`}>
                         <Github className="mr-2 h-4 w-4" /> Code
                       </Button>
                     </div>
@@ -738,17 +759,17 @@ export default function Home() {
             <button
               onClick={prevProject}
               disabled={isTransitioning}
-              className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-3 md:p-3 w-12 h-12 md:w-auto md:h-auto rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-rose-50 transition-all hover:scale-110 hover:shadow-xl hover:-translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group active:scale-95"
+              className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-3 md:p-3 w-12 h-12 md:w-auto md:h-auto rounded-full backdrop-blur-sm shadow-lg transition-all hover:scale-110 hover:shadow-xl hover:-translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group active:scale-95 ${isDarkMode ? 'bg-white/10 hover:bg-white/20' : 'bg-white/90 hover:bg-rose-50'}`}
             >
-              <ChevronLeft className="h-6 w-6 text-slate-900 group-hover:text-rose-600 transition-colors" />
+              <ChevronLeft className={`h-6 w-6 transition-colors ${isDarkMode ? 'text-white group-hover:text-rose-400' : 'text-slate-900 group-hover:text-rose-600'}`} />
             </button>
 
             <button
               onClick={nextProject}
               disabled={isTransitioning}
-              className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-3 md:p-3 w-12 h-12 md:w-auto md:h-auto rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-rose-50 transition-all hover:scale-110 hover:shadow-xl hover:translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group active:scale-95"
+              className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-3 md:p-3 w-12 h-12 md:w-auto md:h-auto rounded-full backdrop-blur-sm shadow-lg transition-all hover:scale-110 hover:shadow-xl hover:translate-x-1 disabled:opacity-50 disabled:cursor-not-allowed group active:scale-95 ${isDarkMode ? 'bg-white/10 hover:bg-white/20' : 'bg-white/90 hover:bg-rose-50'}`}
             >
-              <ChevronRight className="h-6 w-6 text-slate-900 group-hover:text-rose-600 transition-colors" />
+              <ChevronRight className={`h-6 w-6 transition-colors ${isDarkMode ? 'text-white group-hover:text-rose-400' : 'text-slate-900 group-hover:text-rose-600'}`} />
             </button>
 
             <div className="flex justify-center gap-2 mt-8 relative">
@@ -793,8 +814,8 @@ export default function Home() {
             'opacity-0 translate-y-20'
           }`}>
             <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">GET IN TOUCH</p>
-            <h2 className="text-5xl font-bold text-slate-900 mb-6">Let's Connect</h2>
-            <p className="text-xl text-slate-800 mb-12 font-medium">
+            <h2 className={`text-5xl font-bold mb-6 transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Let's Connect</h2>
+            <p className={`text-xl mb-12 font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>
               I'm actively looking for opportunities to start my career. Let's connect and discuss how I can contribute to your team!
             </p>
           </div>
@@ -802,7 +823,9 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6 mb-12 relative z-10">
             <Card
               onTouchStart={createTouchRipple}
-              className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
+              className={`p-6 hover:shadow-xl transition-all duration-500 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
+                isDarkMode ? 'border-white/10 hover:border-white/30 bg-white/5' : 'border-slate-200 hover:border-rose-200 bg-white/80'
+              } ${
                 sectionAnimations.contact === 'in' ? 'opacity-100 translate-y-0' :
                 sectionAnimations.contact === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
                 'opacity-0 translate-y-20'
@@ -813,13 +836,15 @@ export default function Home() {
               } : { transitionDelay: '100ms' }}
             >
               <Mail className="h-8 w-8 mx-auto mb-4 text-rose-500" />
-              <h3 className="font-bold text-slate-900 mb-2">Email</h3>
-              <p className="text-slate-800 font-medium">amalendua10@gmail.com</p>
+              <h3 className={`font-bold mb-2 transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Email</h3>
+              <p className={`font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>amalendua10@gmail.com</p>
             </Card>
 
             <Card
               onTouchStart={createTouchRipple}
-              className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow active:scale-95 relative overflow-hidden ${
+              className={`p-6 hover:shadow-xl transition-all duration-500 backdrop-blur-sm interactive-glow active:scale-95 relative overflow-hidden ${
+                isDarkMode ? 'border-white/10 hover:border-white/30 bg-white/5' : 'border-slate-200 hover:border-rose-200 bg-white/80'
+              } ${
                 sectionAnimations.contact === 'in' ? 'opacity-100 translate-y-0' :
                 sectionAnimations.contact === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
                 'opacity-0 translate-y-20'
@@ -829,13 +854,15 @@ export default function Home() {
               }}
             >
               <Github className="h-8 w-8 mx-auto mb-4 text-rose-500" />
-              <h3 className="font-bold text-slate-900 mb-2">GitHub</h3>
-              <p className="text-slate-800 font-medium">@blushygirl</p>
+              <h3 className={`font-bold mb-2 transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>GitHub</h3>
+              <p className={`font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>@blushygirl</p>
             </Card>
 
             <Card
               onTouchStart={createTouchRipple}
-              className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
+              className={`p-6 hover:shadow-xl transition-all duration-500 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
+                isDarkMode ? 'border-white/10 hover:border-white/30 bg-white/5' : 'border-slate-200 hover:border-rose-200 bg-white/80'
+              } ${
                 sectionAnimations.contact === 'in' ? 'opacity-100 translate-y-0' :
                 sectionAnimations.contact === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
                 'opacity-0 translate-y-20'
@@ -846,8 +873,8 @@ export default function Home() {
               } : { transitionDelay: '300ms' }}
             >
               <Linkedin className="h-8 w-8 mx-auto mb-4 text-rose-500" />
-              <h3 className="font-bold text-slate-900 mb-2">LinkedIn</h3>
-              <p className="text-slate-800 font-medium">/in/blushygirl</p>
+              <h3 className={`font-bold mb-2 transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>LinkedIn</h3>
+              <p className={`font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>/in/blushygirl</p>
             </Card>
           </div>
 
@@ -870,9 +897,9 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-slate-900 text-white py-12 px-6">
+      <footer className={`py-12 px-6 transition-colors duration-500 ${isDarkMode ? 'bg-black border-t border-white/10' : 'bg-slate-900'}`}>
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-slate-400">© 2024 Blushy Girl. Crafted with passion and code.</p>
+          <p className={`transition-colors duration-500 ${isDarkMode ? 'text-gray-400' : 'text-slate-400'}`}>© 2024 Blushy Girl. Crafted with passion and code.</p>
         </div>
       </footer>
     </main>
