@@ -648,22 +648,17 @@ export default function Home() {
             </Card>
           </div>
 
-          <div className="flex gap-4 justify-center items-center">
-            <Button className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-12 py-6 text-lg">
-              Send Message <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button
-              onClick={() => {
-                const phoneNumber = '917306064252'
-                const message = 'Hi! I visited your portfolio and would love to connect.'
-                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
-                window.open(whatsappUrl, '_blank')
-              }}
-              className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-12 py-6 text-lg"
-            >
-              WhatsApp <MessageCircle className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
+          <Button
+            onClick={() => {
+              const phoneNumber = '917306064252'
+              const message = 'Hi! I visited your portfolio and would love to connect.'
+              const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+              window.open(whatsappUrl, '_blank')
+            }}
+            className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-12 py-6 text-lg"
+          >
+            Send Message <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
         </div>
       </section>
 
