@@ -770,7 +770,7 @@ export default function Home() {
             >
               <Mail className="h-8 w-8 mx-auto mb-4 text-rose-500" />
               <h3 className="font-bold text-slate-900 mb-2">Email</h3>
-              <p className="text-slate-800 font-medium">hello@blushygirl.dev</p>
+              <p className="text-slate-800 font-medium">amalendua10@gmail.com</p>
             </Card>
 
             <Card
