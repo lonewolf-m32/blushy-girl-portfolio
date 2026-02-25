@@ -410,7 +410,11 @@ export default function Home() {
                 <Button className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-8">
                   View Projects <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-                <Button variant="outline" className="border-slate-300 hover:border-rose-500 hover:text-rose-500">
+                <Button
+                  onClick={() => window.open('/AmalenduA.CV.pdf', '_blank')}
+                  variant="outline"
+                  className="border-slate-300 hover:border-rose-500 hover:text-rose-500"
+                >
                   Download CV
                 </Button>
               </div>
