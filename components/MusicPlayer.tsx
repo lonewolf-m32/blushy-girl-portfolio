@@ -3,14 +3,21 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Play, Pause, Volume2 } from 'lucide-react'
+import { Play, Pause, Volume2, SkipBack, SkipForward } from 'lucide-react'
 import { Slider } from '@/components/ui/slider'
+
+const songs = [
+  { title: 'Husn', src: '/Husn_-_Djjohal.fm.mp3' },
+  { title: 'Husn (Alt)', src: '/Husn_-_Djjohal.fm_(1).mp3' },
+  { title: 'Jeena Jeena', src: '/Jeena_Jeena_Badlapur-(Mr-Jat.in)_(1).mp3' }
+]
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [volume, setVolume] = useState(70)
+  const [currentSongIndex, setCurrentSongIndex] = useState(0)
   const audioRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
@@ -19,10 +26,14 @@ export default function MusicPlayer() {
 
     const updateTime = () => setCurrentTime(audio.currentTime)
     const updateDuration = () => setDuration(audio.duration)
+    const handleEnded = () => {
+      setIsPlaying(false)
+      playNext()
+    }
 
     audio.addEventListener('timeupdate', updateTime)
     audio.addEventListener('loadedmetadata', updateDuration)
-    audio.addEventListener('ended', () => setIsPlaying(false))
+    audio.addEventListener('ended', handleEnded)
 
     audio.play().then(() => {
       setIsPlaying(true)
@@ -33,9 +44,15 @@ export default function MusicPlayer() {
     return () => {
       audio.removeEventListener('timeupdate', updateTime)
       audio.removeEventListener('loadedmetadata', updateDuration)
-      audio.removeEventListener('ended', () => setIsPlaying(false))
+      audio.removeEventListener('ended', handleEnded)
     }
-  }, [])
+  }, [currentSongIndex])
+
+  useEffect(() => {
+    if (audioRef.current && isPlaying) {
+      audioRef.current.play().catch(() => setIsPlaying(false))
+    }
+  }, [currentSongIndex])
 
   useEffect(() => {
     if (audioRef.current) {
@@ -68,9 +85,19 @@ export default function MusicPlayer() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`
   }
 
+  const playNext = () => {
+    setCurrentSongIndex((prev) => (prev + 1) % songs.length)
+    setCurrentTime(0)
+  }
+
+  const playPrevious = () => {
+    setCurrentSongIndex((prev) => (prev - 1 + songs.length) % songs.length)
+    setCurrentTime(0)
+  }
+
   return (
     <Card className="p-6 bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl hover:shadow-2xl transition-all duration-300">
-      <audio ref={audioRef} src="/Husn_-_Djjohal.fm.mp3" />
+      <audio ref={audioRef} src={songs[currentSongIndex].src} />
 
       <div className="flex items-center gap-4 mb-4">
         <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 flex items-center justify-center shadow-lg">
@@ -80,7 +107,7 @@ export default function MusicPlayer() {
         </div>
 
         <div className="flex-1">
-          <h3 className="font-bold text-slate-900 text-lg">Husn</h3>
+          <h3 className="font-bold text-slate-900 text-lg">{songs[currentSongIndex].title}</h3>
           <p className="text-slate-600 text-sm">Now Playing</p>
         </div>
       </div>
@@ -101,17 +128,37 @@ export default function MusicPlayer() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Button
-            onClick={togglePlayPause}
-            size="lg"
-            className="w-14 h-14 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300"
-          >
-            {isPlaying ? (
-              <Pause className="h-6 w-6" fill="white" />
-            ) : (
-              <Play className="h-6 w-6" fill="white" />
-            )}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={playPrevious}
+              size="lg"
+              variant="ghost"
+              className="w-10 h-10 rounded-full hover:bg-rose-100 transition-all duration-300"
+            >
+              <SkipBack className="h-5 w-5 text-rose-500" />
+            </Button>
+
+            <Button
+              onClick={togglePlayPause}
+              size="lg"
+              className="w-14 h-14 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300"
+            >
+              {isPlaying ? (
+                <Pause className="h-6 w-6" fill="white" />
+              ) : (
+                <Play className="h-6 w-6" fill="white" />
+              )}
+            </Button>
+
+            <Button
+              onClick={playNext}
+              size="lg"
+              variant="ghost"
+              className="w-10 h-10 rounded-full hover:bg-rose-100 transition-all duration-300"
+            >
+              <SkipForward className="h-5 w-5 text-rose-500" />
+            </Button>
+          </div>
 
           <div className="flex items-center gap-2 flex-1">
             <Volume2 className="h-5 w-5 text-rose-500" />
