@@ -526,49 +526,48 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
         <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl animate-in fade-in duration-300" onClick={() => setShowLyrics(false)}>
           <div className="h-full w-full flex flex-col" onClick={(e) => e.stopPropagation()}>
             <div
-              className={`flex items-center justify-between p-6 backdrop-blur-sm ${
+              className={`flex items-center justify-between p-3 sm:p-4 md:p-6 backdrop-blur-sm ${
                 isDarkMode ? 'bg-slate-900/50 border-b border-white/10' : 'bg-white/10 border-b border-white/20'
               }`}
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
                 <div
-                  className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg ${
+                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-lg ${
                     isDarkMode
                       ? 'bg-gradient-to-br from-cyan-400 to-teal-400'
                       : 'bg-gradient-to-br from-rose-400 to-pink-400'
                   }`}
                 >
-                  <Music2 className="w-7 h-7 text-white" />
+                  <Music2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-white">{currentSong.title}</h2>
-                  <p className="text-sm text-gray-400">
-                    {isTimingMode ? 'Timing Mode (Space = stamp, Ctrl+Z = undo)' : 'Song Lyrics'}
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">{currentSong.title}</h2>
+                  <p className="text-xs sm:text-sm text-gray-400">
+                    {isTimingMode ? 'Timing Mode' : 'Song Lyrics'}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <Button
                   variant="secondary"
+                  size="sm"
+                  className="hidden md:flex"
                   onClick={() => {
                     setIsTimingMode((v) => !v)
                     setTimingIndex(0)
                     setTimedLyrics(currentSong.lyrics.map((l) => ({ ...l, time: 0 })))
                   }}
                 >
-                  {isTimingMode ? 'Exit Timing' : 'Timing Mode'}
+                  {isTimingMode ? 'Exit' : 'Timing'}
                 </Button>
 
                 {isTimingMode && (
                   <>
-                    <Button onClick={stampNextLine}>Stamp Next</Button>
-                    <Button variant="ghost" onClick={copyTimingJson} className="text-white hover:bg-white/10">
-                      Copy JSON
+                    <Button size="sm" onClick={stampNextLine} className="hidden sm:flex">Stamp</Button>
+                    <Button variant="ghost" size="sm" onClick={copyTimingJson} className="hidden lg:flex text-white hover:bg-white/10">
+                      Copy
                     </Button>
-                    <div className="text-xs text-gray-400">
-                      {Math.min(timingIndex + 1, timedLyrics.length)}/{timedLyrics.length}
-                    </div>
                   </>
                 )}
 
@@ -576,21 +575,21 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
                   onClick={() => setShowLyrics(false)}
                   variant="ghost"
                   size="icon"
-                  className="w-12 h-12 rounded-full hover:bg-white/10 text-white"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:bg-white/10 text-white"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5" />
                 </Button>
               </div>
             </div>
 
-            <div ref={lyricsContainerRef} className="flex-1 overflow-y-auto px-6 py-12 scroll-smooth">
-              <div className="max-w-3xl mx-auto space-y-6 min-h-[60vh] flex flex-col justify-center">
+            <div ref={lyricsContainerRef} className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12 scroll-smooth">
+              <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 md:space-y-5 min-h-[50vh]">
                 {activeLyrics.map((line, index) => {
                   const isBlank = line.text.trim() === ''
                   const isActive = index === currentLyricIndex
 
                   return (
-                    <div key={index} data-lyric-index={index} className={`text-center transition-all duration-500 ${isBlank ? 'h-6' : ''}`}>
+                    <div key={index} data-lyric-index={index} className={`text-center transition-all duration-500 ${isBlank ? 'h-4 sm:h-5' : ''}`}>
                       {!isBlank ? (
                         <>
                           {isTimingMode && (
@@ -600,7 +599,7 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
                             </div>
                           )}
                           <p
-                            className={`text-2xl md:text-3xl lg:text-4xl font-semibold leading-relaxed transition-all duration-500 px-4 ${
+                            className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight sm:leading-relaxed transition-all duration-500 px-2 sm:px-4 ${
                               isActive
                                 ? isDarkMode
                                   ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 scale-105 drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]'
@@ -621,20 +620,20 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
             </div>
 
             <div
-              className={`p-6 backdrop-blur-sm ${
+              className={`p-3 sm:p-4 md:p-6 backdrop-blur-sm ${
                 isDarkMode ? 'bg-slate-900/50 border-t border-white/10' : 'bg-white/10 border-t border-white/20'
               }`}
             >
-              <div className="max-w-4xl mx-auto flex items-center gap-6">
+              <div className="max-w-4xl mx-auto flex items-center gap-2 sm:gap-4 md:gap-6">
                 <Button
                   onClick={(e) => {
                     e.stopPropagation()
                     playPrevious()
                   }}
-                  size="lg"
-                  className={`w-12 h-12 rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-500/20 hover:bg-rose-500/30'}`}
+                  size="sm"
+                  className={`w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-500/20 hover:bg-rose-500/30'}`}
                 >
-                  <SkipBack className={`h-5 w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-400'}`} />
+                  <SkipBack className={`h-4 w-4 sm:h-5 sm:w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-400'}`} />
                 </Button>
 
                 <Button
@@ -642,14 +641,14 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
                     e.stopPropagation()
                     togglePlayPause()
                   }}
-                  size="lg"
-                  className={`w-16 h-16 rounded-full shadow-lg ${
+                  size="sm"
+                  className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full shadow-lg ${
                     isDarkMode
                       ? 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600'
                       : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600'
                   }`}
                 >
-                  {isPlaying ? <Pause className="h-6 w-6" fill="white" /> : <Play className="h-6 w-6" fill="white" />}
+                  {isPlaying ? <Pause className="h-5 w-5 sm:h-6 sm:w-6" fill="white" /> : <Play className="h-5 w-5 sm:h-6 sm:w-6" fill="white" />}
                 </Button>
 
                 <Button
@@ -657,15 +656,15 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
                     e.stopPropagation()
                     playNext()
                   }}
-                  size="lg"
-                  className={`w-12 h-12 rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-500/20 hover:bg-rose-500/30'}`}
+                  size="sm"
+                  className={`w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-500/20 hover:bg-rose-500/30'}`}
                 >
-                  <SkipForward className={`h-5 w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-400'}`} />
+                  <SkipForward className={`h-4 w-4 sm:h-5 sm:w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-400'}`} />
                 </Button>
 
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <Slider value={[currentTime]} max={duration || 100} step={0.1} onValueChange={handleSeek} className="cursor-pointer" />
-                  <div className="flex justify-between text-xs mt-2 text-gray-400">
+                  <div className="flex justify-between text-[10px] sm:text-xs mt-1 sm:mt-2 text-gray-400">
                     <span>{formatTime(currentTime)}</span>
                     <span>{formatTime(duration)}</span>
                   </div>
@@ -673,9 +672,8 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
               </div>
 
               {isTimingMode && (
-                <div className="mt-4 max-w-4xl mx-auto text-xs text-gray-400">
-                  Tip: Play the song, then press <b>Space</b> exactly when each line starts. After finishing, click <b>Copy JSON</b> and paste
-                  it back into the <code>lyrics</code> for that song.
+                <div className="mt-2 sm:mt-4 max-w-4xl mx-auto text-[10px] sm:text-xs text-gray-400 px-2">
+                  Press <b>Space</b> when each line starts. <b>Copy JSON</b> when done.
                 </div>
               )}
             </div>
