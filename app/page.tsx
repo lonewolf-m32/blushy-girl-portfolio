@@ -205,15 +205,15 @@ export default function Home() {
     <main className="min-h-screen relative overflow-hidden">
       <div className="fixed inset-0 z-0">
         <div
-          className="w-full h-full transition-transform duration-300 ease-out"
+          className="w-full h-full transition-transform duration-700 ease-out animate-bg-zoom"
           style={{
-            transform: `translate(${mousePosition.x * 20}px, ${mousePosition.y * 20}px) scale(1.1)`
+            transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 30}px) scale(1.1) rotate(${mousePosition.x * 2}deg)`
           }}
         >
           <img
             src="/AAGiea67SZQ_1760388181671.jpg"
             alt="Background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover animate-bg-rotate-subtle"
           />
         </div>
         <div className="absolute inset-0 bg-white/85 backdrop-blur-sm"></div>
@@ -242,12 +242,24 @@ export default function Home() {
           <div className="absolute bottom-32 left-1/3 w-72 h-72 bg-fuchsia-400/25 rounded-full blur-3xl animate-float"></div>
           <div className="absolute top-2/3 right-1/4 w-96 h-96 bg-rose-300/15 rounded-full blur-3xl animate-float-delayed"></div>
           <div className="absolute bottom-1/4 left-1/2 w-64 h-64 bg-pink-300/20 rounded-full blur-3xl animate-orb-drift"></div>
+        </div>
 
-          <div className="absolute top-10 right-20 w-96 h-96 bg-gradient-to-br from-amber-300/40 via-yellow-400/30 to-orange-300/35 rounded-full animate-golden-glow"></div>
-          <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-tr from-yellow-300/35 via-amber-400/40 to-yellow-500/30 rounded-full animate-golden-pulse"></div>
-          <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-gradient-to-br from-orange-300/30 via-amber-300/35 to-yellow-400/25 rounded-full animate-golden-drift"></div>
-          <div className="absolute bottom-1/3 right-1/3 w-88 h-88 bg-gradient-to-tl from-amber-400/35 via-yellow-300/30 to-orange-400/25 rounded-full animate-golden-glow" style={{ animationDelay: '3s' }}></div>
-          <div className="absolute top-3/4 right-10 w-64 h-64 bg-gradient-to-br from-yellow-400/30 via-amber-300/25 to-orange-300/30 rounded-full animate-golden-pulse" style={{ animationDelay: '5s' }}></div>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[...Array(25)].map((_, i) => (
+            <div
+              key={`golden-${i}`}
+              className="absolute rounded-full bg-gradient-to-br from-amber-400 via-yellow-400 to-orange-400 animate-golden-particle animate-golden-shimmer"
+              style={{
+                left: `${(i * 13 + 5) % 95}%`,
+                bottom: `${(i * 7) % 20}%`,
+                width: `${4 + (i % 3) * 2}px`,
+                height: `${4 + (i % 3) * 2}px`,
+                animationDelay: `${i * 0.3}s`,
+                animationDuration: `${3 + (i % 3)}s`,
+                filter: 'blur(1px)'
+              }}
+            />
+          ))}
         </div>
 
         <div className="absolute inset-0 pointer-events-none opacity-30">
