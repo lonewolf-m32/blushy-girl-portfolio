@@ -57,10 +57,12 @@ export default function Home() {
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [showSwipeHint, setShowSwipeHint] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
 
   const minSwipeDistance = 50
 
   useEffect(() => {
+    setIsMounted(true)
     setIsVisible(true)
 
     const observerOptions = {
@@ -204,9 +206,9 @@ export default function Home() {
       <div className="fixed inset-0 z-0">
         <div
           className="w-full h-full transition-transform duration-700 ease-out animate-bg-zoom"
-          style={{
+          style={isMounted ? {
             transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 30}px) scale(1.1) rotate(${mousePosition.x * 2}deg)`
-          }}
+          } : {}}
         >
           <img
             src="/AAGiea67SZQ_1760388181671.jpg"
@@ -231,9 +233,9 @@ export default function Home() {
 
         <div
           className="absolute inset-0 pointer-events-none overflow-hidden"
-          style={{
+          style={isMounted ? {
             transform: `translate(${mousePosition.x * -15}px, ${mousePosition.y * -15}px)`
-          }}
+          } : {}}
         >
           <div className="absolute top-20 left-20 w-64 h-64 bg-rose-400/25 rounded-full blur-3xl animate-orb-drift"></div>
           <div className="absolute top-1/3 right-32 w-80 h-80 bg-pink-400/20 rounded-full blur-3xl animate-orb-drift-alt"></div>
@@ -521,9 +523,9 @@ export default function Home() {
 
             <div
               className="relative parallax-slow"
-              style={{
+              style={isMounted ? {
                 transform: `translate(${mousePosition.x * -10}px, ${mousePosition.y * -10}px)`
-              }}
+              } : {}}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-pink-400 rounded-full blur-3xl opacity-20 animate-pulse-slow"></div>
               <div className="absolute -inset-4 bg-gradient-to-r from-rose-300 via-pink-300 to-fuchsia-300 rounded-3xl blur-2xl opacity-10 animate-float"></div>
@@ -582,10 +584,10 @@ export default function Home() {
                 className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:scale-105 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
                   visibleSections.has('skills') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
                 }`}
-                style={{
+                style={isMounted ? {
                   transform: `translate(${mousePosition.x * (idx % 2 === 0 ? 5 : -5)}px, ${mousePosition.y * (idx % 2 === 0 ? 5 : -5)}px)`,
                   transitionDelay: `${idx * 100}ms`
-                }}
+                } : { transitionDelay: `${idx * 100}ms` }}
               >
                 {touchRipples.map(ripple => (
                   <span
@@ -761,10 +763,10 @@ export default function Home() {
               className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
                 visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
               }`}
-              style={{
+              style={isMounted ? {
                 transform: `translate(${mousePosition.x * 8}px, ${mousePosition.y * 8}px)`,
                 transitionDelay: '100ms'
-              }}
+              } : { transitionDelay: '100ms' }}
             >
               <Mail className="h-8 w-8 mx-auto mb-4 text-rose-500" />
               <h3 className="font-bold text-slate-900 mb-2">Email</h3>
@@ -790,10 +792,10 @@ export default function Home() {
               className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
                 visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
               }`}
-              style={{
+              style={isMounted ? {
                 transform: `translate(${mousePosition.x * -8}px, ${mousePosition.y * -8}px)`,
                 transitionDelay: '300ms'
-              }}
+              } : { transitionDelay: '300ms' }}
             >
               <Linkedin className="h-8 w-8 mx-auto mb-4 text-rose-500" />
               <h3 className="font-bold text-slate-900 mb-2">LinkedIn</h3>
