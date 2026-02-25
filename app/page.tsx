@@ -520,7 +520,7 @@ export default function Home() {
                 <h1 className="text-6xl font-bold leading-tight">
                   <span className="text-slate-900 drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">Hi, I'm</span>
                   <span className="block bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">
-                    Shutumani
+                    Blushy Girl
                   </span>
                 </h1>
               </div>
