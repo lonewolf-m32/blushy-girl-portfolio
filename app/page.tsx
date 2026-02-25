@@ -53,6 +53,13 @@ export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
+  const [sectionAnimations, setSectionAnimations] = useState<Record<string, 'in' | 'out' | 'hidden'>>({
+    about: 'hidden',
+    skills: 'hidden',
+    projects: 'hidden',
+    contact: 'hidden'
+  })
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down')
   const [touchRipples, setTouchRipples] = useState<Array<{id: number, x: number, y: number}>>([])
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
@@ -99,6 +106,9 @@ export default function Home() {
       const scrolled = (currentScrollY / windowHeight) * 100
       setScrollProgress(scrolled)
 
+      const direction = currentScrollY > lastScrollY ? 'down' : 'up'
+      setScrollDirection(direction)
+
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setShowNavbar(false)
       } else {
@@ -106,17 +116,35 @@ export default function Home() {
       }
       setLastScrollY(currentScrollY)
 
+      const newAnimations: Record<string, 'in' | 'out' | 'hidden'> = {}
+      const viewportHeight = window.innerHeight
+
       for (const section of sections) {
         const element = document.getElementById(section)
         if (element) {
+          const rect = element.getBoundingClientRect()
+          const sectionTop = rect.top
+          const sectionBottom = rect.bottom
+
+          if (sectionTop < viewportHeight * 0.75 && sectionBottom > viewportHeight * 0.25) {
+            newAnimations[section] = 'in'
+          } else if (sectionTop < viewportHeight * 0.25) {
+            newAnimations[section] = direction === 'down' ? 'out' : 'in'
+          } else if (sectionBottom > viewportHeight * 0.75) {
+            newAnimations[section] = direction === 'up' ? 'out' : 'in'
+          } else {
+            newAnimations[section] = 'hidden'
+          }
+
           const offsetTop = element.offsetTop
           const offsetBottom = offsetTop + element.offsetHeight
           if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
             setActiveSection(section)
-            break
           }
         }
       }
+
+      setSectionAnimations(newAnimations)
     }
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -477,7 +505,11 @@ export default function Home() {
       </nav>
 
       <section id="about" className="min-h-screen flex items-center justify-center px-6 pt-20 relative z-10">
-        <div className={`max-w-7xl w-full transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`max-w-7xl w-full transition-all duration-700 ${
+          sectionAnimations.about === 'in' ? 'opacity-100 translate-y-0' :
+          sectionAnimations.about === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+          'opacity-0 translate-y-20'
+        }`}>
           <div className="mb-12 max-w-md mx-auto lg:mx-0">
             <MusicPlayer />
           </div>
@@ -570,7 +602,9 @@ export default function Home() {
       <section id="skills" className="py-32 px-6 relative overflow-hidden z-10">
         <div className="max-w-7xl mx-auto">
           <div className={`text-center mb-16 transition-all duration-700 ${
-            visibleSections.has('skills') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            sectionAnimations.skills === 'in' ? 'opacity-100 translate-y-0' :
+            sectionAnimations.skills === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+            'opacity-0 translate-y-20'
           }`}>
             <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">EXPERTISE</p>
             <h2 className="text-5xl font-bold text-slate-900">Skills & Technologies</h2>
@@ -582,7 +616,9 @@ export default function Home() {
                 key={idx}
                 onTouchStart={createTouchRipple}
                 className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:scale-105 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
-                  visibleSections.has('skills') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+                  sectionAnimations.skills === 'in' ? 'opacity-100 translate-y-0' :
+                  sectionAnimations.skills === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+                  'opacity-0 translate-y-20'
                 }`}
                 style={isMounted ? {
                   transform: `translate(${mousePosition.x * (idx % 2 === 0 ? 5 : -5)}px, ${mousePosition.y * (idx % 2 === 0 ? 5 : -5)}px)`,
@@ -626,14 +662,18 @@ export default function Home() {
       <section id="projects" className="py-32 px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className={`text-center mb-16 transition-all duration-700 ${
-            visibleSections.has('projects') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            sectionAnimations.projects === 'in' ? 'opacity-100 translate-y-0' :
+            sectionAnimations.projects === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+            'opacity-0 translate-y-20'
           }`}>
             <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">PORTFOLIO</p>
             <h2 className="text-5xl font-bold text-slate-900">Featured Projects</h2>
           </div>
 
           <div className={`relative perspective-1000 transition-all duration-700 ${
-            visibleSections.has('projects') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+            sectionAnimations.projects === 'in' ? 'opacity-100 translate-y-0' :
+            sectionAnimations.projects === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+            'opacity-0 translate-y-20'
           }`}>
             <div
               className="overflow-hidden rounded-2xl"
@@ -748,7 +788,9 @@ export default function Home() {
       <section id="contact" className="py-32 px-6 relative overflow-hidden z-10">
         <div className="max-w-4xl mx-auto text-center">
           <div className={`transition-all duration-700 ${
-            visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            sectionAnimations.contact === 'in' ? 'opacity-100 translate-y-0' :
+            sectionAnimations.contact === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+            'opacity-0 translate-y-20'
           }`}>
             <p className="text-rose-600 font-bold tracking-wide mb-2 text-sm">GET IN TOUCH</p>
             <h2 className="text-5xl font-bold text-slate-900 mb-6">Let's Connect</h2>
@@ -761,7 +803,9 @@ export default function Home() {
             <Card
               onTouchStart={createTouchRipple}
               className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
-                visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+                sectionAnimations.contact === 'in' ? 'opacity-100 translate-y-0' :
+                sectionAnimations.contact === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+                'opacity-0 translate-y-20'
               }`}
               style={isMounted ? {
                 transform: `translate(${mousePosition.x * 8}px, ${mousePosition.y * 8}px)`,
@@ -776,7 +820,9 @@ export default function Home() {
             <Card
               onTouchStart={createTouchRipple}
               className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow active:scale-95 relative overflow-hidden ${
-                visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+                sectionAnimations.contact === 'in' ? 'opacity-100 translate-y-0' :
+                sectionAnimations.contact === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+                'opacity-0 translate-y-20'
               }`}
               style={{
                 transitionDelay: '200ms'
@@ -790,7 +836,9 @@ export default function Home() {
             <Card
               onTouchStart={createTouchRipple}
               className={`p-6 hover:shadow-xl transition-all duration-500 border-slate-200 hover:border-rose-200 bg-white/80 backdrop-blur-sm interactive-glow parallax-slow active:scale-95 relative overflow-hidden ${
-                visibleSections.has('contact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
+                sectionAnimations.contact === 'in' ? 'opacity-100 translate-y-0' :
+                sectionAnimations.contact === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+                'opacity-0 translate-y-20'
               }`}
               style={isMounted ? {
                 transform: `translate(${mousePosition.x * -8}px, ${mousePosition.y * -8}px)`,
