@@ -8,7 +8,7 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
-  title: 'Blushy Girl - Full Stack Developer',
+  title: 'Blushy Girl',
   description: 'Recent graduate passionate about creating beautiful, functional web applications',
   icons: {
     icon: [
