@@ -302,10 +302,20 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
           setCurrentLyricIndex(idx)
 
           if (showLyrics && lyricsContainerRef.current && !cues[idx]?.isGap) {
-            const el = lyricsContainerRef.current.querySelector(
-              `[data-lyric-index="${idx}"]`
-            ) as HTMLElement | null
-            el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            const container = lyricsContainerRef.current
+            const el = container.querySelector(`[data-lyric-index="${idx}"]`) as HTMLElement | null
+
+            if (el) {
+              const containerHeight = container.clientHeight
+              const elementTop = el.offsetTop
+              const elementHeight = el.clientHeight
+              const scrollPosition = elementTop - (containerHeight / 2) + (elementHeight / 2)
+
+              container.scrollTo({
+                top: scrollPosition,
+                behavior: 'smooth'
+              })
+            }
           }
         }
       }
@@ -573,31 +583,31 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
               </div>
             </div>
 
-            <div ref={lyricsContainerRef} className="flex-1 overflow-y-auto px-8 py-16 flex items-center justify-center">
-              <div className="max-w-4xl w-full space-y-8">
+            <div ref={lyricsContainerRef} className="flex-1 overflow-y-auto px-6 py-12 scroll-smooth">
+              <div className="max-w-3xl mx-auto space-y-6 min-h-[60vh] flex flex-col justify-center">
                 {activeLyrics.map((line, index) => {
                   const isBlank = line.text.trim() === ''
                   const isActive = index === currentLyricIndex
 
                   return (
-                    <div key={index} data-lyric-index={index} className={`text-center transition-all duration-500 ${isBlank ? 'h-8' : ''}`}>
+                    <div key={index} data-lyric-index={index} className={`text-center transition-all duration-500 ${isBlank ? 'h-6' : ''}`}>
                       {!isBlank ? (
                         <>
                           {isTimingMode && (
-                            <div className="mb-2 text-xs text-gray-500">
+                            <div className="mb-1 text-xs text-gray-500">
                               {index === timingIndex ? '▶ ' : ''}
                               t={Number(line.time || 0).toFixed(2)}s
                             </div>
                           )}
                           <p
-                            className={`text-3xl md:text-4xl lg:text-5xl font-semibold leading-relaxed transition-all duration-500 ${
+                            className={`text-2xl md:text-3xl lg:text-4xl font-semibold leading-relaxed transition-all duration-500 px-4 ${
                               isActive
                                 ? isDarkMode
-                                  ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 scale-110 drop-shadow-[0_0_30px_rgba(34,211,238,0.5)]'
-                                  : 'text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-pink-400 scale-110 drop-shadow-[0_0_30px_rgba(251,113,133,0.5)]'
+                                  ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 scale-105 drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]'
+                                  : 'text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-pink-400 scale-105 drop-shadow-[0_0_20px_rgba(251,113,133,0.4)]'
                                 : index < currentLyricIndex
-                                ? 'text-gray-600 scale-95 opacity-40'
-                                : 'text-gray-500 scale-90 opacity-30'
+                                ? 'text-gray-600 scale-95 opacity-50'
+                                : 'text-gray-500 scale-90 opacity-35'
                             }`}
                           >
                             {line.text}
