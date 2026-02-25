@@ -10,6 +10,14 @@ const quicksand = Quicksand({
 export const metadata: Metadata = {
   title: 'Blushy Girl - Full Stack Developer',
   description: 'Recent graduate passionate about creating beautiful, functional web applications',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
 };
 
 export default function RootLayout({
