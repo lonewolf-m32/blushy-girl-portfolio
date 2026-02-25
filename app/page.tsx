@@ -216,7 +216,7 @@ export default function Home() {
             className="w-full h-full object-cover animate-bg-rotate-subtle"
           />
         </div>
-        <div className="absolute inset-0 bg-white/85 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/92 via-white/90 to-white/94 backdrop-blur-md"></div>
 
         <div
           className="absolute inset-0 bg-gradient-to-br from-rose-100/40 via-pink-50/30 to-fuchsia-100/40 animate-mesh-gradient"
@@ -483,15 +483,15 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div className="space-y-2">
-                <p className="text-rose-600 font-bold tracking-wide text-sm">FRESHER FULL STACK DEVELOPER</p>
-                <h1 className="text-6xl font-bold text-slate-900 leading-tight">
-                  Hi, I'm
-                  <span className="block bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+                <p className="text-rose-600 font-bold tracking-wide text-sm drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)]">FRESHER FULL STACK DEVELOPER</p>
+                <h1 className="text-6xl font-bold leading-tight">
+                  <span className="text-slate-900 drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">Hi, I'm</span>
+                  <span className="block bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(255,255,255,0.95)]">
                     Blushy Girl
                   </span>
                 </h1>
               </div>
-              <p className="text-xl text-slate-800 leading-relaxed font-medium">
+              <p className="text-xl text-slate-900 leading-relaxed font-semibold drop-shadow-[0_2px_6px_rgba(255,255,255,0.95)]">
                 Recent graduate passionate about creating beautiful, functional web applications.
                 Eager to learn, grow, and contribute to innovative projects with modern technologies.
               </p>
