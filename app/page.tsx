@@ -214,7 +214,7 @@ export default function Home() {
             className="w-full h-full object-cover animate-bg-rotate-subtle"
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-br from-white/92 via-white/90 to-white/94 backdrop-blur-md"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/85 via-white/80 to-white/85 backdrop-blur-sm"></div>
 
         <div
           className="absolute inset-0 bg-gradient-to-br from-rose-100/40 via-pink-50/30 to-fuchsia-100/40 animate-mesh-gradient"
@@ -243,19 +243,19 @@ export default function Home() {
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(15)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <div
               key={`golden-${i}`}
-              className="absolute rounded-full bg-gradient-to-br from-amber-300 via-yellow-400 to-amber-400 animate-float opacity-60"
+              className="absolute rounded-full bg-gradient-to-br from-amber-300 via-yellow-400 to-amber-400 animate-float opacity-50"
               style={{
-                left: `${(i * 17 + 10) % 90}%`,
-                top: `${(i * 13 + 15) % 85}%`,
-                width: `${30 + (i % 4) * 20}px`,
-                height: `${30 + (i % 4) * 20}px`,
-                animationDelay: `${i * 0.5}s`,
-                animationDuration: `${4 + (i % 3) * 2}s`,
-                filter: 'blur(2px)',
-                boxShadow: '0 0 40px rgba(251, 191, 36, 0.5), 0 0 80px rgba(251, 191, 36, 0.3)'
+                left: `${(i * 20 + 10) % 85}%`,
+                top: `${(i * 17 + 10) % 80}%`,
+                width: `${60 + (i % 3) * 40}px`,
+                height: `${60 + (i % 3) * 40}px`,
+                animationDelay: `${i * 0.7}s`,
+                animationDuration: `${5 + (i % 3) * 2}s`,
+                filter: 'blur(3px)',
+                boxShadow: '0 0 60px rgba(251, 191, 36, 0.6), 0 0 100px rgba(251, 191, 36, 0.4)'
               }}
             />
           ))}
