@@ -86,11 +86,6 @@ export default function Home() {
       setShowSwipeHint(false)
     }, 4000)
 
-    return () => {
-      observer.disconnect()
-      clearTimeout(swipeHintTimer)
-    }
-
     const handleScroll = () => {
       const sections = ['about', 'skills', 'projects', 'contact']
       const scrollPosition = window.scrollY + 100
@@ -130,7 +125,10 @@ export default function Home() {
 
     window.addEventListener('scroll', handleScroll)
     window.addEventListener('mousemove', handleMouseMove)
+
     return () => {
+      observer.disconnect()
+      clearTimeout(swipeHintTimer)
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('mousemove', handleMouseMove)
     }
