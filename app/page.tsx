@@ -54,7 +54,7 @@ export default function Home() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
   const [sectionAnimations, setSectionAnimations] = useState<Record<string, 'in' | 'out' | 'hidden'>>({
-    about: 'hidden',
+    about: 'in',
     skills: 'hidden',
     projects: 'hidden',
     contact: 'hidden'
