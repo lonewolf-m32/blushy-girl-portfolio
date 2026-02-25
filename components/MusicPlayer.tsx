@@ -8,7 +8,7 @@ import { Slider } from '@/components/ui/slider'
 
 const songs = [
   { title: 'Husn', src: '/Husn_-_Djjohal.fm.mp3' },
-  { title: 'Husn (Alt)', src: '/Husn_-_Djjohal.fm_(1).mp3' },
+  { title: 'Maruvarthai', src: '/Maru_Varthai_Pesathey_-_Sid_Sriram_(1).mp3' },
   { title: 'Jeena Jeena', src: '/Jeena_Jeena_Badlapur-(Mr-Jat.in)_(1).mp3' }
 ]
 
