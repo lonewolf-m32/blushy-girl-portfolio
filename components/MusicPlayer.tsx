@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Play, Pause, Volume2, SkipBack, SkipForward, Music2, X } from 'lucide-react'
@@ -11,16 +11,14 @@ interface MusicPlayerProps {
 }
 
 interface LyricLine {
-  time: number // start time (seconds)
+  time: number
   text: string
 }
-
-type LyricCue = { start: number; end: number; text: string; isGap: boolean }
 
 type Song = {
   title: string
   src: string
-  lyricOffset?: number // seconds: + highlights earlier/later depending on your file
+  lyricOffset?: number
   lyrics: LyricLine[]
 }
 
@@ -165,87 +163,17 @@ const songs: Song[] = [
   },
 ]
 
-// ---------- helpers ----------
-function toCues(lines: LyricLine[], durationFallback: number): LyricCue[] {
-  const sorted = [...lines].sort((a, b) => a.time - b.time)
-  return sorted.map((l, i) => {
-    const nextStart = sorted[i + 1]?.time ?? durationFallback
-    return {
-      start: l.time,
-      end: Math.max(l.time, nextStart),
-      text: l.text,
-      isGap: l.text.trim() === '',
-    }
-  })
-}
-
-function findCueIndex(cues: LyricCue[], t: number) {
-  let lo = 0
-  let hi = cues.length - 1
-  while (lo <= hi) {
-    const mid = (lo + hi) >> 1
-    const c = cues[mid]
-    if (t < c.start) hi = mid - 1
-    else if (t >= c.end) lo = mid + 1
-    else return mid
-  }
-  return Math.max(0, Math.min(cues.length - 1, lo - 1))
-}
-
-function normalizeTimedLyrics(lines: LyricLine[]) {
-  // remove impossible times, keep order stable, and ensure monotonic times
-  const cleaned = lines.map((l) => ({
-    time: Number.isFinite(l.time) && l.time >= 0 ? l.time : 0,
-    text: l.text,
-  }))
-
-  // enforce non-decreasing
-  for (let i = 1; i < cleaned.length; i++) {
-    if (cleaned[i].time < cleaned[i - 1].time) cleaned[i].time = cleaned[i - 1].time
-  }
-  return cleaned
-}
-
 export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [volume, setVolume] = useState(70)
   const [currentSongIndex, setCurrentSongIndex] = useState(0)
-  const [showLyrics, setShowLyrics] = useState(false)
-  const [currentLyricIndex, setCurrentLyricIndex] = useState(0)
-
-  // Timing mode (tap-to-time)
-  const [isTimingMode, setIsTimingMode] = useState(false)
-  const [timingIndex, setTimingIndex] = useState(0)
-  const [timedLyrics, setTimedLyrics] = useState<LyricLine[]>(() => songs[0].lyrics)
+  const [showLibrary, setShowLibrary] = useState(false)
 
   const audioRef = useRef<HTMLAudioElement>(null)
-  const lyricsContainerRef = useRef<HTMLDivElement>(null)
-  const rafRef = useRef<number | null>(null)
-
-  // Smooth highlight feel
-  const LOOKAHEAD = 0.06
 
   const currentSong = songs[currentSongIndex]
-  const lyricOffset = currentSong.lyricOffset ?? 0
-
-  // When song changes, reset timing mode state
-  useEffect(() => {
-    setCurrentLyricIndex(0)
-    setIsTimingMode(false)
-    setTimingIndex(0)
-    // start with zeroed timings so you can stamp cleanly
-    setTimedLyrics(currentSong.lyrics.map((l) => ({ ...l, time: 0 })))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSongIndex])
-
-  const activeLyrics: LyricLine[] = isTimingMode ? timedLyrics : currentSong.lyrics
-
-  const cues = useMemo(() => {
-    const fallback = duration > 0 ? duration : 9999
-    return toCues(activeLyrics, fallback)
-  }, [activeLyrics, duration])
 
   // Base audio listeners: time + duration + ended
   useEffect(() => {
@@ -284,109 +212,6 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
     audio.volume = volume / 100
   }, [volume])
 
-  // RAF-driven lyric highlighting (smooth + accurate)
-  useEffect(() => {
-    const audio = audioRef.current
-    if (!audio) return
-
-    const stop = () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-      rafRef.current = null
-    }
-
-    const tick = () => {
-      const t = audio.currentTime + lyricOffset + LOOKAHEAD
-      if (cues.length) {
-        const idx = findCueIndex(cues, t)
-        if (idx !== currentLyricIndex) {
-          setCurrentLyricIndex(idx)
-
-          if (showLyrics && lyricsContainerRef.current && !cues[idx]?.isGap) {
-            const container = lyricsContainerRef.current
-            const el = container.querySelector(`[data-lyric-index="${idx}"]`) as HTMLElement | null
-
-            if (el) {
-              const containerHeight = container.clientHeight
-              const elementTop = el.offsetTop
-              const elementHeight = el.clientHeight
-              const scrollPosition = elementTop - (containerHeight / 2) + (elementHeight / 2)
-
-              container.scrollTo({
-                top: scrollPosition,
-                behavior: 'smooth'
-              })
-            }
-          }
-        }
-      }
-      rafRef.current = requestAnimationFrame(tick)
-    }
-
-    const onPlay = () => {
-      stop()
-      rafRef.current = requestAnimationFrame(tick)
-    }
-    const onPause = () => stop()
-    const onSeeked = () => {
-      stop()
-      rafRef.current = requestAnimationFrame(tick)
-    }
-
-    audio.addEventListener('play', onPlay)
-    audio.addEventListener('pause', onPause)
-    audio.addEventListener('seeked', onSeeked)
-
-    if (!audio.paused) onPlay()
-
-    return () => {
-      audio.removeEventListener('play', onPlay)
-      audio.removeEventListener('pause', onPause)
-      audio.removeEventListener('seeked', onSeeked)
-      stop()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cues, showLyrics, currentLyricIndex, lyricOffset])
-
-  // Timing mode: stamp next line (button or Space)
-  const stampNextLine = () => {
-    const audio = audioRef.current
-    if (!audio) return
-    setTimedLyrics((prev) => {
-      if (timingIndex >= prev.length) return prev
-      const next = [...prev]
-      next[timingIndex] = { ...next[timingIndex], time: Number(audio.currentTime.toFixed(2)) }
-      return next
-    })
-    setTimingIndex((i) => i + 1)
-  }
-
-  // Spacebar stamps in timing mode
-  useEffect(() => {
-    if (!isTimingMode) return
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        e.preventDefault()
-        stampNextLine()
-      }
-      // quick undo
-      if (e.ctrlKey && e.key.toLowerCase() === 'z') {
-        e.preventDefault()
-        setTimingIndex((i) => Math.max(0, i - 1))
-        setTimedLyrics((prev) => {
-          const next = [...prev]
-          const idx = Math.max(0, timingIndex - 1)
-          if (next[idx]) next[idx] = { ...next[idx], time: 0 }
-          return next
-        })
-      }
-    }
-
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTimingMode, timingIndex])
-
   const togglePlayPause = () => {
     const audio = audioRef.current
     if (!audio) return
@@ -421,9 +246,10 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
     setCurrentTime(0)
   }
 
-  const copyTimingJson = async () => {
-    const payload = JSON.stringify(normalizeTimedLyrics(timedLyrics), null, 2)
-    await navigator.clipboard.writeText(payload)
+  const selectSong = (index: number) => {
+    setCurrentSongIndex(index)
+    setCurrentTime(0)
+    setShowLibrary(false)
   }
 
   return (
@@ -432,7 +258,7 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
         className={`p-6 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer ${
           isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white/90 border-rose-200'
         }`}
-        onClick={() => setShowLyrics(true)}
+        onClick={() => setShowLibrary(true)}
       >
         <audio ref={audioRef} src={currentSong.src} preload="metadata" />
 
@@ -463,7 +289,14 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <Slider value={[currentTime]} max={duration || 100} step={0.1} onValueChange={handleSeek} className="cursor-pointer" />
+            <Slider
+              value={[currentTime]}
+              max={duration || 100}
+              step={0.1}
+              onValueChange={handleSeek}
+              className="cursor-pointer"
+              onClick={(e) => e.stopPropagation()}
+            />
             <div className={`flex justify-between text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-slate-600'}`}>
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
@@ -514,7 +347,7 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
               </Button>
             </div>
 
-            <div className="flex items-center gap-2 flex-1">
+            <div className="flex items-center gap-2 flex-1" onClick={(e) => e.stopPropagation()}>
               <Volume2 className={`h-5 w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-500'}`} />
               <Slider value={[volume]} max={100} step={1} onValueChange={(value) => setVolume(value[0])} className="cursor-pointer" />
             </div>
@@ -522,15 +355,15 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
         </div>
       </Card>
 
-      {showLyrics && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl animate-in fade-in duration-300" onClick={() => setShowLyrics(false)}>
+      {showLibrary && (
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl animate-in fade-in duration-300" onClick={() => setShowLibrary(false)}>
           <div className="h-full w-full flex flex-col" onClick={(e) => e.stopPropagation()}>
             <div
-              className={`flex items-center justify-between p-3 sm:p-4 md:p-6 backdrop-blur-sm ${
+              className={`flex items-center justify-between p-4 sm:p-6 backdrop-blur-sm ${
                 isDarkMode ? 'bg-slate-900/50 border-b border-white/10' : 'bg-white/10 border-b border-white/20'
               }`}
             >
-              <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <div
                   className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-lg ${
                     isDarkMode
@@ -541,141 +374,75 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
                   <Music2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">{currentSong.title}</h2>
-                  <p className="text-xs sm:text-sm text-gray-400">
-                    {isTimingMode ? 'Timing Mode' : 'Song Lyrics'}
-                  </p>
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">Music Library</h2>
+                  <p className="text-xs sm:text-sm text-gray-400">{songs.length} songs</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="hidden md:flex"
-                  onClick={() => {
-                    setIsTimingMode((v) => !v)
-                    setTimingIndex(0)
-                    setTimedLyrics(currentSong.lyrics.map((l) => ({ ...l, time: 0 })))
-                  }}
-                >
-                  {isTimingMode ? 'Exit' : 'Timing'}
-                </Button>
-
-                {isTimingMode && (
-                  <>
-                    <Button size="sm" onClick={stampNextLine} className="hidden sm:flex">Stamp</Button>
-                    <Button variant="ghost" size="sm" onClick={copyTimingJson} className="hidden lg:flex text-white hover:bg-white/10">
-                      Copy
-                    </Button>
-                  </>
-                )}
-
-                <Button
-                  onClick={() => setShowLyrics(false)}
-                  variant="ghost"
-                  size="icon"
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:bg-white/10 text-white"
-                >
-                  <X className="w-5 h-5" />
-                </Button>
-              </div>
+              <Button
+                onClick={() => setShowLibrary(false)}
+                variant="ghost"
+                size="icon"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full hover:bg-white/10 text-white"
+              >
+                <X className="w-5 h-5" />
+              </Button>
             </div>
 
-            <div ref={lyricsContainerRef} className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12 scroll-smooth">
-              <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 md:space-y-5 min-h-[50vh]">
-                {activeLyrics.map((line, index) => {
-                  const isBlank = line.text.trim() === ''
-                  const isActive = index === currentLyricIndex
-
-                  return (
-                    <div key={index} data-lyric-index={index} className={`text-center transition-all duration-500 ${isBlank ? 'h-4 sm:h-5' : ''}`}>
-                      {!isBlank ? (
-                        <>
-                          {isTimingMode && (
-                            <div className="mb-1 text-xs text-gray-500">
-                              {index === timingIndex ? '▶ ' : ''}
-                              t={Number(line.time || 0).toFixed(2)}s
-                            </div>
-                          )}
-                          <p
-                            className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight sm:leading-relaxed transition-all duration-500 px-2 sm:px-4 ${
-                              isActive
-                                ? isDarkMode
-                                  ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 scale-105 drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]'
-                                  : 'text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-pink-400 scale-105 drop-shadow-[0_0_20px_rgba(251,113,133,0.4)]'
-                                : index < currentLyricIndex
-                                ? 'text-gray-600 scale-95 opacity-50'
-                                : 'text-gray-500 scale-90 opacity-35'
-                            }`}
-                          >
-                            {line.text}
-                          </p>
-                        </>
-                      ) : null}
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 sm:py-8">
+              <div className="max-w-2xl mx-auto space-y-2 sm:space-y-3">
+                {songs.map((song, index) => (
+                  <button
+                    key={index}
+                    onClick={() => selectSong(index)}
+                    className={`w-full p-4 sm:p-5 rounded-xl backdrop-blur-sm transition-all duration-300 text-left hover:scale-[1.02] ${
+                      index === currentSongIndex
+                        ? isDarkMode
+                          ? 'bg-cyan-500/20 border-2 border-cyan-400/50 shadow-lg shadow-cyan-500/20'
+                          : 'bg-rose-500/20 border-2 border-rose-400/50 shadow-lg shadow-rose-500/20'
+                        : isDarkMode
+                        ? 'bg-white/5 border border-white/10 hover:bg-white/10'
+                        : 'bg-white/10 border border-white/20 hover:bg-white/20'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div
+                        className={`w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center shadow-md ${
+                          index === currentSongIndex
+                            ? isDarkMode
+                              ? 'bg-gradient-to-br from-cyan-400 to-teal-400'
+                              : 'bg-gradient-to-br from-rose-400 to-pink-400'
+                            : isDarkMode
+                            ? 'bg-slate-700'
+                            : 'bg-white/20'
+                        }`}
+                      >
+                        {index === currentSongIndex && isPlaying ? (
+                          <Pause className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="white" />
+                        ) : (
+                          <Play className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="white" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3
+                          className={`font-semibold text-base sm:text-lg truncate ${
+                            index === currentSongIndex
+                              ? isDarkMode
+                                ? 'text-cyan-400'
+                                : 'text-rose-400'
+                              : 'text-white'
+                          }`}
+                        >
+                          {song.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-gray-400">
+                          {index === currentSongIndex ? 'Now Playing' : 'Tap to play'}
+                        </p>
+                      </div>
                     </div>
-                  )
-                })}
+                  </button>
+                ))}
               </div>
-            </div>
-
-            <div
-              className={`p-3 sm:p-4 md:p-6 backdrop-blur-sm ${
-                isDarkMode ? 'bg-slate-900/50 border-t border-white/10' : 'bg-white/10 border-t border-white/20'
-              }`}
-            >
-              <div className="max-w-4xl mx-auto flex items-center gap-2 sm:gap-4 md:gap-6">
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    playPrevious()
-                  }}
-                  size="sm"
-                  className={`w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-500/20 hover:bg-rose-500/30'}`}
-                >
-                  <SkipBack className={`h-4 w-4 sm:h-5 sm:w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-400'}`} />
-                </Button>
-
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    togglePlayPause()
-                  }}
-                  size="sm"
-                  className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full shadow-lg ${
-                    isDarkMode
-                      ? 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600'
-                      : 'bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600'
-                  }`}
-                >
-                  {isPlaying ? <Pause className="h-5 w-5 sm:h-6 sm:w-6" fill="white" /> : <Play className="h-5 w-5 sm:h-6 sm:w-6" fill="white" />}
-                </Button>
-
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    playNext()
-                  }}
-                  size="sm"
-                  className={`w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full ${isDarkMode ? 'bg-cyan-500/20 hover:bg-cyan-500/30' : 'bg-rose-500/20 hover:bg-rose-500/30'}`}
-                >
-                  <SkipForward className={`h-4 w-4 sm:h-5 sm:w-5 ${isDarkMode ? 'text-cyan-400' : 'text-rose-400'}`} />
-                </Button>
-
-                <div className="flex-1 min-w-0">
-                  <Slider value={[currentTime]} max={duration || 100} step={0.1} onValueChange={handleSeek} className="cursor-pointer" />
-                  <div className="flex justify-between text-[10px] sm:text-xs mt-1 sm:mt-2 text-gray-400">
-                    <span>{formatTime(currentTime)}</span>
-                    <span>{formatTime(duration)}</span>
-                  </div>
-                </div>
-              </div>
-
-              {isTimingMode && (
-                <div className="mt-2 sm:mt-4 max-w-4xl mx-auto text-[10px] sm:text-xs text-gray-400 px-2">
-                  Press <b>Space</b> when each line starts. <b>Copy JSON</b> when done.
-                </div>
-              )}
             </div>
           </div>
         </div>
