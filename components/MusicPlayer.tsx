@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Play, Pause, Volume2, SkipBack, SkipForward, Music2, X } from 'lucide-react'
+import { Play, Pause, Volume2, SkipBack, SkipForward, Music2, X, Sparkles } from 'lucide-react'
 import { Slider } from '@/components/ui/slider'
 
 interface MusicPlayerProps {
@@ -170,8 +170,14 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
   const [volume, setVolume] = useState(70)
   const [currentSongIndex, setCurrentSongIndex] = useState(0)
   const [showLibrary, setShowLibrary] = useState(false)
+  const [showDisco, setShowDisco] = useState(false)
 
   const audioRef = useRef<HTMLAudioElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const animationFrameRef = useRef<number | null>(null)
+  const audioContextRef = useRef<AudioContext | null>(null)
+  const analyserRef = useRef<AnalyserNode | null>(null)
+  const dataArrayRef = useRef<Uint8Array | null>(null)
 
   const currentSong = songs[currentSongIndex]
 
@@ -252,6 +258,119 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
     setShowLibrary(false)
   }
 
+  const setupAudioAnalyser = () => {
+    const audio = audioRef.current
+    if (!audio || audioContextRef.current) return
+
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+    const analyser = audioContext.createAnalyser()
+    const source = audioContext.createMediaElementSource(audio)
+
+    analyser.fftSize = 256
+    const bufferLength = analyser.frequencyBinCount
+    const dataArray = new Uint8Array(bufferLength)
+
+    source.connect(analyser)
+    analyser.connect(audioContext.destination)
+
+    audioContextRef.current = audioContext
+    analyserRef.current = analyser
+    dataArrayRef.current = dataArray
+  }
+
+  const drawDisco = () => {
+    const canvas = canvasRef.current
+    const analyser = analyserRef.current
+    const dataArray = dataArrayRef.current
+
+    if (!canvas || !analyser || !dataArray) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const WIDTH = canvas.width
+    const HEIGHT = canvas.height
+    const bufferLength = analyser.frequencyBinCount
+
+    analyser.getByteFrequencyData(dataArray)
+
+    ctx.fillStyle = 'rgb(0, 0, 0)'
+    ctx.fillRect(0, 0, WIDTH, HEIGHT)
+
+    const barWidth = (WIDTH / bufferLength) * 2.5
+    let x = 0
+
+    for (let i = 0; i < bufferLength; i++) {
+      const barHeight = (dataArray[i] / 255) * HEIGHT * 0.8
+
+      const hue = (i / bufferLength) * 360
+      const saturation = 100
+      const lightness = 50 + (dataArray[i] / 255) * 30
+
+      ctx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`
+      ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
+
+      ctx.shadowBlur = 20
+      ctx.shadowColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`
+
+      const circleX = x + barWidth / 2
+      const circleY = HEIGHT / 2
+      const radius = (dataArray[i] / 255) * 50
+
+      ctx.beginPath()
+      ctx.arc(circleX, circleY, radius, 0, Math.PI * 2)
+      ctx.fill()
+
+      x += barWidth + 1
+    }
+
+    ctx.shadowBlur = 0
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
+    ctx.font = 'bold 48px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(currentSong.title, WIDTH / 2, HEIGHT / 2)
+
+    animationFrameRef.current = requestAnimationFrame(drawDisco)
+  }
+
+  useEffect(() => {
+    if (showDisco) {
+      if (!audioContextRef.current) {
+        setupAudioAnalyser()
+      }
+      drawDisco()
+    } else {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
+      }
+    }
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showDisco])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const updateCanvasSize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    updateCanvasSize()
+    window.addEventListener('resize', updateCanvasSize)
+
+    return () => window.removeEventListener('resize', updateCanvasSize)
+  }, [])
+
   return (
     <>
       <Card
@@ -285,6 +404,20 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
             <h3 className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{currentSong.title}</h3>
             <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-slate-600'}`}>Now Playing</p>
           </div>
+
+          <Button
+            onClick={(e) => {
+              e.stopPropagation()
+              setShowDisco(true)
+            }}
+            variant="ghost"
+            size="icon"
+            className={`w-10 h-10 rounded-full transition-all duration-300 ${
+              isDarkMode ? 'hover:bg-cyan-500/20 text-cyan-400' : 'hover:bg-rose-200 text-rose-600'
+            }`}
+          >
+            <Sparkles className="h-5 w-5" />
+          </Button>
         </div>
 
         <div className="space-y-4">
@@ -354,6 +487,55 @@ export default function MusicPlayer({ isDarkMode = false }: MusicPlayerProps) {
           </div>
         </div>
       </Card>
+
+      {showDisco && (
+        <div className="fixed inset-0 z-50 bg-black" onClick={() => setShowDisco(false)}>
+          <canvas ref={canvasRef} className="w-full h-full" />
+          <Button
+            onClick={() => setShowDisco(false)}
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm"
+          >
+            <X className="w-6 h-6" />
+          </Button>
+
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-4 bg-black/50 backdrop-blur-md px-6 py-4 rounded-full">
+            <Button
+              onClick={(e) => {
+                e.stopPropagation()
+                playPrevious()
+              }}
+              size="sm"
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20"
+            >
+              <SkipBack className="h-5 w-5 text-white" />
+            </Button>
+
+            <Button
+              onClick={(e) => {
+                e.stopPropagation()
+                togglePlayPause()
+              }}
+              size="lg"
+              className="w-14 h-14 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg"
+            >
+              {isPlaying ? <Pause className="h-6 w-6" fill="white" /> : <Play className="h-6 w-6" fill="white" />}
+            </Button>
+
+            <Button
+              onClick={(e) => {
+                e.stopPropagation()
+                playNext()
+              }}
+              size="sm"
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20"
+            >
+              <SkipForward className="h-5 w-5 text-white" />
+            </Button>
+          </div>
+        </div>
+      )}
 
       {showLibrary && (
         <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl animate-in fade-in duration-300" onClick={() => setShowLibrary(false)}>
