@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Github, Linkedin, Mail, ArrowRight, Code2, Database, Palette, ChevronLeft, ChevronRight, MessageCircle, Moon, Sun, Gamepad2 } from "lucide-react"
 import MusicPlayer from "@/components/MusicPlayer"
 import HangmanGame from "@/components/HangmanGame"
+import PhotoGallery from "@/components/PhotoGallery"
 import { projects } from "@/data/projects"
 import { skills } from "@/data/skills"
 
@@ -871,41 +872,12 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 relative z-10">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item, idx) => (
-              <div
-                key={idx}
-                className={`group relative overflow-hidden rounded-2xl transition-all duration-700 hover:scale-105 hover:z-10 cursor-pointer ${
-                  sectionAnimations.gallery === 'in' ? 'opacity-100 translate-y-0' :
-                  sectionAnimations.gallery === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
-                  'opacity-0 translate-y-20'
-                }`}
-                style={{
-                  transitionDelay: `${idx * 100}ms`,
-                  aspectRatio: '1/1'
-                }}
-              >
-                <div className={`absolute inset-0 transition-all duration-500 ${isDarkMode ? 'bg-slate-800/50' : 'bg-gradient-to-br from-rose-100 to-pink-100'}`}>
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className={`text-center transition-all duration-300 group-hover:scale-110 ${isDarkMode ? 'text-gray-400' : 'text-slate-400'}`}>
-                      <div className={`w-16 h-16 mx-auto mb-2 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-slate-700/50' : 'bg-white/50'}`}>
-                        <span className="text-2xl">+</span>
-                      </div>
-                      <p className="text-sm font-medium">Add Photo</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none ${isDarkMode ? 'bg-gradient-to-br from-cyan-500/30 via-transparent to-teal-500/30' : 'bg-gradient-to-br from-rose-500/30 via-transparent to-pink-500/30'}`}></div>
-
-                <div className={`absolute inset-0 border-2 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-2xl ${isDarkMode ? 'border-cyan-400/50' : 'border-rose-400/50'}`}></div>
-
-                <div className={`absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-all duration-500 ${isDarkMode ? 'bg-gradient-to-t from-black/90 to-transparent' : 'bg-gradient-to-t from-white/90 to-transparent'}`}>
-                  <p className={`text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Photo {item}</p>
-                  <p className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>Click to view</p>
-                </div>
-              </div>
-            ))}
+          <div className={`relative z-10 transition-all duration-700 ${
+            sectionAnimations.gallery === 'in' ? 'opacity-100 translate-y-0' :
+            sectionAnimations.gallery === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+            'opacity-0 translate-y-20'
+          }`}>
+            <PhotoGallery isDarkMode={isDarkMode} />
           </div>
         </div>
       </section>

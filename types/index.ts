@@ -14,3 +14,15 @@ export interface SkillCategory {
   category: string
   items: string[]
 }
+
+export interface Photo {
+  src: string
+  alt: string
+}
+
+export interface PhotoAlbum {
+  id: string
+  title: string
+  description: string
+  photos: Photo[]
+}

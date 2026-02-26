@@ -13,11 +13,13 @@ project/
 ├── components/            # React components
 │   ├── MusicPlayer.tsx   # Music player component
 │   ├── HangmanGame.tsx   # Hangman game component
+│   ├── PhotoGallery.tsx  # Photo gallery component
 │   └── ui/               # shadcn/ui components
 ├── data/                 # Static data files
 │   ├── songs.ts         # Music library data
 │   ├── projects.ts      # Portfolio projects
-│   └── skills.ts        # Skills and technologies
+│   ├── skills.ts        # Skills and technologies
+│   └── gallery.ts       # Photo albums data
 ├── types/               # TypeScript type definitions
 │   └── index.ts        # Shared types
 ├── hooks/              # Custom React hooks
@@ -33,6 +35,7 @@ project/
 
 - Interactive music player with 6 songs
 - Hangman word guessing game
+- Photo gallery with collage layout and lightbox
 - Smooth scroll animations
 - Dark/light mode toggle
 - Responsive design
