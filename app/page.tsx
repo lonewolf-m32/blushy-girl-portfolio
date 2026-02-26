@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Github, Linkedin, Mail, ArrowRight, Code2, Database, Palette, ChevronLeft, ChevronRight, MessageCircle, Moon, Sun } from "lucide-react"
+import { Github, Linkedin, Mail, ArrowRight, Code2, Database, Palette, ChevronLeft, ChevronRight, MessageCircle, Moon, Sun, Gamepad2 } from "lucide-react"
 import MusicPlayer from "@/components/MusicPlayer"
+import HangmanGame from "@/components/HangmanGame"
 
 const projects = [
   {
@@ -57,6 +58,7 @@ export default function Home() {
     about: 'in',
     skills: 'hidden',
     projects: 'hidden',
+    games: 'hidden',
     gallery: 'hidden',
     contact: 'hidden'
   })
@@ -87,7 +89,7 @@ export default function Home() {
       })
     }, observerOptions)
 
-    const sections = ['about', 'skills', 'projects', 'gallery', 'contact']
+    const sections = ['about', 'skills', 'projects', 'games', 'gallery', 'contact']
     sections.forEach(id => {
       const element = document.getElementById(id)
       if (element) observer.observe(element)
@@ -98,7 +100,7 @@ export default function Home() {
     }, 4000)
 
     const handleScroll = () => {
-      const sections = ['about', 'skills', 'projects', 'gallery', 'contact']
+      const sections = ['about', 'skills', 'projects', 'games', 'gallery', 'contact']
       const scrollPosition = window.scrollY + 100
       const currentScrollY = window.scrollY
 
@@ -388,6 +390,20 @@ export default function Home() {
               )}
             </a>
             <a
+              href="#games"
+              onClick={(e) => scrollToSection(e, 'games')}
+              className={`relative text-sm font-medium transition-all duration-300 ${
+                activeSection === 'games'
+                  ? (isDarkMode ? 'text-cyan-400' : 'text-rose-600')
+                  : isDarkMode ? 'text-white hover:text-cyan-400' : 'text-slate-600 hover:text-rose-600'
+              }`}
+            >
+              Games
+              {activeSection === 'games' && (
+                <span className={`absolute -bottom-1 left-0 w-full h-0.5 rounded-full ${isDarkMode ? 'bg-gradient-to-r from-cyan-500 to-teal-500' : 'bg-gradient-to-r from-rose-500 to-pink-500'}`}></span>
+              )}
+            </a>
+            <a
               href="#gallery"
               onClick={(e) => scrollToSection(e, 'gallery')}
               className={`relative text-sm font-medium transition-all duration-300 ${
@@ -494,6 +510,20 @@ export default function Home() {
             >
               Projects
               {activeSection === 'projects' && (
+                <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full ${isDarkMode ? 'bg-gradient-to-b from-cyan-500 to-teal-500' : 'bg-gradient-to-b from-rose-500 to-pink-500'}`}></span>
+              )}
+            </a>
+            <a
+              href="#games"
+              onClick={(e) => scrollToSection(e, 'games')}
+              className={`relative text-lg font-medium transition-all duration-300 py-3 px-4 rounded-lg ${
+                activeSection === 'games'
+                  ? (isDarkMode ? 'text-cyan-400 bg-white/5' : 'text-rose-600 bg-rose-50')
+                  : isDarkMode ? 'text-white hover:text-cyan-400 hover:bg-white/5' : 'text-slate-600 hover:text-rose-600 hover:bg-rose-50/50'
+              }`}
+            >
+              Games
+              {activeSection === 'games' && (
                 <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full ${isDarkMode ? 'bg-gradient-to-b from-cyan-500 to-teal-500' : 'bg-gradient-to-b from-rose-500 to-pink-500'}`}></span>
               )}
             </a>
@@ -831,6 +861,30 @@ export default function Home() {
                 <ChevronRight className={`h-4 w-4 animate-pulse ${isDarkMode ? 'text-cyan-500' : 'text-rose-500'}`} />
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      <section id="games" className="py-32 px-6 relative overflow-hidden z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className={`text-center mb-16 transition-all duration-700 ${
+            sectionAnimations.games === 'in' ? 'opacity-100 translate-y-0' :
+            sectionAnimations.games === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+            'opacity-0 translate-y-20'
+          }`}>
+            <p className={`font-bold tracking-wide mb-2 text-sm ${isDarkMode ? 'text-cyan-400' : 'text-rose-600'}`}>GAMING ZONE</p>
+            <h2 className={`text-5xl font-bold transition-colors duration-500 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Play Hangman</h2>
+            <p className={`text-xl mt-4 font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-800'}`}>
+              Guess the word before running out of tries
+            </p>
+          </div>
+
+          <div className={`max-w-5xl mx-auto transition-all duration-700 ${
+            sectionAnimations.games === 'in' ? 'opacity-100 translate-y-0' :
+            sectionAnimations.games === 'out' ? (scrollDirection === 'down' ? 'opacity-0 -translate-y-20' : 'opacity-0 translate-y-20') :
+            'opacity-0 translate-y-20'
+          }`}>
+            <HangmanGame isDarkMode={isDarkMode} />
           </div>
         </div>
       </section>
