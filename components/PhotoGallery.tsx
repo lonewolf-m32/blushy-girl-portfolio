@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
-import { X, ZoomIn, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
+import { X, ZoomIn, ChevronLeft, ChevronRight, Images } from 'lucide-react'
 import { photoAlbums } from '@/data/gallery'
 import Image from 'next/image'
 
@@ -22,13 +22,11 @@ interface Particle {
 export default function PhotoGallery({ isDarkMode = false }: PhotoGalleryProps) {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null)
   const [particles, setParticles] = useState<Particle[]>([])
+  const [isOpen, setIsOpen] = useState(false)
   const album = photoAlbums[0]
 
-  const placeholderCount = 6
-  const totalCards = album.photos.length + placeholderCount
-
   useEffect(() => {
-    if (selectedPhotoIndex !== null) {
+    if (isOpen) {
       const newParticles: Particle[] = Array.from({ length: 30 }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
@@ -39,7 +37,17 @@ export default function PhotoGallery({ isDarkMode = false }: PhotoGalleryProps) 
       }))
       setParticles(newParticles)
     }
-  }, [selectedPhotoIndex])
+  }, [isOpen])
+
+  const openGallery = () => {
+    setIsOpen(true)
+    setSelectedPhotoIndex(0)
+  }
+
+  const closeGallery = () => {
+    setIsOpen(false)
+    setSelectedPhotoIndex(null)
+  }
 
   const handlePrevious = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -56,21 +64,21 @@ export default function PhotoGallery({ isDarkMode = false }: PhotoGalleryProps) 
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (selectedPhotoIndex === null) return
+    if (!isOpen) return
 
-    if (e.key === 'ArrowLeft' && selectedPhotoIndex > 0) {
+    if (e.key === 'ArrowLeft' && selectedPhotoIndex !== null && selectedPhotoIndex > 0) {
       setSelectedPhotoIndex(selectedPhotoIndex - 1)
-    } else if (e.key === 'ArrowRight' && selectedPhotoIndex < album.photos.length - 1) {
+    } else if (e.key === 'ArrowRight' && selectedPhotoIndex !== null && selectedPhotoIndex < album.photos.length - 1) {
       setSelectedPhotoIndex(selectedPhotoIndex + 1)
     } else if (e.key === 'Escape') {
-      setSelectedPhotoIndex(null)
+      closeGallery()
     }
   }
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [selectedPhotoIndex])
+  }, [isOpen, selectedPhotoIndex])
 
   return (
     <>
@@ -84,66 +92,58 @@ export default function PhotoGallery({ isDarkMode = false }: PhotoGalleryProps) 
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {album.photos.map((photo, index) => (
-            <Card
-              key={`photo-${index}`}
-              className={`group relative overflow-hidden cursor-pointer transition-all duration-500 hover:scale-105 hover:z-10 ${
-                isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white/90 border-rose-200'
-              }`}
-              onClick={() => setSelectedPhotoIndex(index)}
-            >
-              <div className="relative aspect-square overflow-hidden">
-                <Image
-                  src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                />
-                <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div
-                    className={`p-3 rounded-full backdrop-blur-sm ${
-                      isDarkMode ? 'bg-cyan-500/30' : 'bg-rose-500/30'
-                    }`}
-                  >
-                    <ZoomIn className="w-6 h-6 text-white" />
+        <div className="flex justify-center">
+          <Card
+            className={`group relative overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] w-full max-w-4xl ${
+              isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white/90 border-rose-200'
+            }`}
+            onClick={openGallery}
+          >
+            <div className="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+              <div className="grid grid-cols-2 gap-2 h-full p-2">
+                {album.photos.slice(0, 2).map((photo, index) => (
+                  <div key={index} className="relative overflow-hidden rounded-lg">
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                    />
                   </div>
-                </div>
-                <div className={`absolute inset-0 border-2 opacity-0 group-hover:opacity-100 transition-all duration-500 ${isDarkMode ? 'border-cyan-400/50' : 'border-rose-400/50'}`}></div>
+                ))}
               </div>
-            </Card>
-          ))}
 
-          {Array.from({ length: placeholderCount }).map((_, index) => (
-            <Card
-              key={`placeholder-${index}`}
-              className={`group relative overflow-hidden cursor-pointer transition-all duration-500 hover:scale-105 hover:z-10 ${
-                isDarkMode ? 'bg-slate-800/50 border-white/10' : 'bg-gradient-to-br from-rose-100 to-pink-100 border-rose-200'
-              }`}
-            >
-              <div className="relative aspect-square overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className={`text-center transition-all duration-300 group-hover:scale-110 ${isDarkMode ? 'text-gray-400' : 'text-slate-400'}`}>
-                    <div className={`w-12 h-12 mx-auto mb-2 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-slate-700/50' : 'bg-white/50'}`}>
-                      <Plus className="w-6 h-6" />
-                    </div>
-                    <p className="text-xs font-medium">Add Photo</p>
-                  </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div
+                  className={`px-6 py-3 rounded-full backdrop-blur-sm flex items-center gap-2 ${
+                    isDarkMode ? 'bg-cyan-500/30' : 'bg-rose-500/30'
+                  }`}
+                >
+                  <Images className="w-6 h-6 text-white" />
+                  <span className="text-white font-semibold">View Gallery ({album.photos.length} photos)</span>
                 </div>
-                <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none ${isDarkMode ? 'bg-gradient-to-br from-cyan-500/30 via-transparent to-teal-500/30' : 'bg-gradient-to-br from-rose-500/30 via-transparent to-pink-500/30'}`}></div>
-                <div className={`absolute inset-0 border-2 opacity-0 group-hover:opacity-100 transition-all duration-500 ${isDarkMode ? 'border-cyan-400/50' : 'border-rose-400/50'}`}></div>
               </div>
-            </Card>
-          ))}
+
+              <div className={`absolute inset-0 border-2 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-lg ${isDarkMode ? 'border-cyan-400/50' : 'border-rose-400/50'}`}></div>
+
+              <div className={`absolute top-4 right-4 px-3 py-1 rounded-full backdrop-blur-md ${isDarkMode ? 'bg-slate-900/80' : 'bg-white/80'}`}>
+                <span className={`text-sm font-semibold flex items-center gap-1 ${isDarkMode ? 'text-cyan-400' : 'text-rose-600'}`}>
+                  <Images className="w-4 h-4" />
+                  {album.photos.length}
+                </span>
+              </div>
+            </div>
+          </Card>
         </div>
       </div>
 
-      {selectedPhotoIndex !== null && (
+      {isOpen && selectedPhotoIndex !== null && (
         <div
           className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl animate-in fade-in duration-300 flex items-center justify-center p-4"
-          onClick={() => setSelectedPhotoIndex(null)}
+          onClick={closeGallery}
         >
           {particles.map((particle) => (
             <div
@@ -165,7 +165,7 @@ export default function PhotoGallery({ isDarkMode = false }: PhotoGalleryProps) 
           ))}
 
           <button
-            onClick={() => setSelectedPhotoIndex(null)}
+            onClick={closeGallery}
             className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
           >
             <X className="w-6 h-6 text-white" />
@@ -217,6 +217,14 @@ export default function PhotoGallery({ isDarkMode = false }: PhotoGalleryProps) 
                 }`}
               />
             ))}
+          </div>
+
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
+            <div className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md">
+              <span className="text-white font-semibold text-sm">
+                {selectedPhotoIndex + 1} / {album.photos.length}
+              </span>
+            </div>
           </div>
         </div>
       )}
