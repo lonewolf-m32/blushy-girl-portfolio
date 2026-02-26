@@ -92,7 +92,7 @@ const songs: Song[] = [
   {
     title: 'Husn',
     src: '/Husn_-_Djjohal.fm.mp3',
-    lyricOffset: 0, // tweak per file if needed
+    lyricOffset: 0,
     lyrics: [
       { time: 0, text: 'Teri husn ki tareef karun' },
       { time: 4, text: 'Ya apni kismat ki?' },
@@ -118,7 +118,7 @@ const songs: Song[] = [
   {
     title: 'Maruvarthai',
     src: '/Maru_Varthai_Pesathey_-_Sid_Sriram_(1).mp3',
-    lyricOffset: 0, // you will set this after timing if needed
+    lyricOffset: 0,
     lyrics: maruvarthaiLyrics,
   },
   {
@@ -159,6 +159,38 @@ const songs: Song[] = [
       { time: 30, text: 'KaNdu naan konden unai' },
       { time: 34, text: 'VaaN nee vendum endru sonnathadi' },
       { time: 38, text: 'VaNduvinai seiduvithennai' },
+    ],
+  },
+  {
+    title: 'Zaalima',
+    src: '/Zaalima_Raees_128_Kbps.mp3',
+    lyricOffset: 0,
+    lyrics: [
+      { time: 0, text: 'Zaalima, zaalima' },
+      { time: 4, text: 'Coca cola lagi' },
+      { time: 8, text: 'Tera zikar ahi' },
+      { time: 12, text: 'Jab jab yaad mera dil na lage' },
+      { time: 16, text: '' },
+      { time: 17, text: 'Meri aankho ke saamne' },
+      { time: 21, text: 'Tu hi hai tu hi' },
+      { time: 25, text: 'Mujhko ab kya lagta hai' },
+      { time: 29, text: 'Tu ne kar liya kabu' },
+    ],
+  },
+  {
+    title: 'Iragai Pole',
+    src: '/Iragai_Pole_-_Yuvan_Shankar_Raja_Tanvi_Shah.mp3',
+    lyricOffset: 0,
+    lyrics: [
+      { time: 0, text: 'Iragai pole yen idhayam' },
+      { time: 4, text: 'Adhu parakkudhu unakkaga' },
+      { time: 8, text: 'Nizhalai pole nee varuvai' },
+      { time: 12, text: 'Adhai thaangudhu en nenjai vida' },
+      { time: 16, text: '' },
+      { time: 17, text: 'Kannamma kannamma' },
+      { time: 21, text: 'Naan unna paarthathum' },
+      { time: 25, text: 'Mayangi ponen' },
+      { time: 29, text: 'Yen uyir udambai vittu sendradhu' },
     ],
   },
 ]
