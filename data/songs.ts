@@ -37,4 +37,16 @@ export const songs: Song[] = [
     title: 'Shinunoga',
     src: '/Shinunoga.mp3',
   },
+  {
+    title: 'Die with a Smile',
+    src: '/Lady_Gaga_feat._Bruno_Mars_-_Die_With_A_Smile_(mp3.pm).mp3',
+  },
+  {
+    title: 'StarBoy',
+    src: '/The_Weeknd_ft._Daft_Punk_-_Starboy_(mp3.pm).mp3',
+  },
+  {
+    title: 'Kun Faya Kun',
+    src: '/Kun_Faaya_Kun_Rockstar_128_Kbps.mp3',
+  },
 ]
