@@ -25,4 +25,16 @@ export const songs: Song[] = [
     title: 'Iragai Pole',
     src: '/Iragai_Pole_-_Yuvan_Shankar_Raja_Tanvi_Shah.mp3',
   },
+  {
+    title: 'Ishq Sufiyana',
+    src: '/Ishq_Sufiyana.mp3',
+  },
+  {
+    title: 'Perfect',
+    src: '/Perfect.mp3',
+  },
+  {
+    title: 'Shinunoga',
+    src: '/Shinunoga.mp3',
+  },
 ]
